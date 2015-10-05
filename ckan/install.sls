@@ -38,6 +38,10 @@ ckan:
       - git: ckan-src
 
 ckan-deps:
+  pkg.installed:
+    - pkgs:
+      - python-dev
+      - libpq-dev  # required by psycopg2.
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
     - user: {{ ckan.ckan_user }}
