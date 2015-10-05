@@ -1,0 +1,5 @@
+ckan:
+  src_dir: '/usr/local/src'
+  ckan_repo: 'https://github.com/ckan/ckan'
+  ckan_home: '/var/lib/ckan'
+  ckan_user: 'ckan'

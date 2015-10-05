@@ -1,0 +1,3 @@
+ckan:
+  lookup:
+    ckan_home: /home/ckan

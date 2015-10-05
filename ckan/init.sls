@@ -1,0 +1,2 @@
+include:
+  - ckan.install
