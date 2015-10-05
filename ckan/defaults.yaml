@@ -1,5 +1,6 @@
 ckan:
   src_dir: '/usr/local/src'
   ckan_repo: 'https://github.com/ckan/ckan'
+  ckan_rev: 'ckan-2.4.1'
   ckan_home: '/var/lib/ckan'
   ckan_user: 'ckan'
