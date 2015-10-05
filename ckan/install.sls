@@ -7,7 +7,7 @@ ckan-user:
     - createhome: True
     - system: True
 
-{{ set ckan_venv = {{ ckan.ckan_home}} + '/venv' }}
+{% set ckan_venv = ckan.ckan_home + '/venv' %}
 
 venv:
   pkg.installed:
@@ -21,7 +21,7 @@ venv:
     - require:
       - user: ckan-user
 
-{{ set ckan_src = {{ ckan.src_dir}} + '/ckan' }}
+{% set ckan_src = ckan.src_dir + '/ckan' %}
 
 ckan-src:
   git.latest:
@@ -31,15 +31,15 @@ ckan-src:
 ckan:
   pip.installed:
     - editable: {{ ckan_src }}
-  - require:
-    - virtualenv: venv
-  - watch:
-    - git: ckan-src
+    - require:
+      - virtualenv: venv
+    - watch:
+      - git: ckan-src
 
 ckan-deps:
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
-    - user: {{ ckan_user }}
+    - user: {{ ckan.ckan_user }}
     - bin_env: {{ ckan_venv }}
     - require:
       - pip: ckan
