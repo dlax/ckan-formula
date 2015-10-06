@@ -71,6 +71,10 @@ make_config:
       - virtualenv: ckan-venv
       - file: {{ ckan_confdir }}
 
+{{ ckan_confdir}}/who.ini:
+  file.symlink:
+    - target: {{ ckan_src }}/who.ini
+
 ckan_environmnent:
   file.managed:
     - name: {{ ckan_confdir }}/environment.sh
