@@ -8,7 +8,7 @@ include:
 {% set repourl = data.get('repourl', 'https://github.com/ckan/' + extname) %}
 {% set rev = data.get('rev', None) %}
 {% set srcdir = [ckan.src_dir, extname]|join('/') %}
-{% set requirements_file = [srcdir, data.get('requirements_file', 'pip-requirements.txt')]|join('/') %}
+{% set requirements_file = [srcdir, data.get('requirements_file', 'requirements.txt')]|join('/') %}
 {% set ckan_venv = ckan.ckan_home + '/venv' %}  # XXX duplicate declaration from ckan.install
 
 {{ extname }}:
