@@ -48,3 +48,24 @@ ckan-deps:
     - bin_env: {{ ckan_venv }}
     - require:
       - pip: ckan
+
+{% set ckan_confdir = [ckan.ckan_home, 'etc', 'ckan', 'default']|join('/') %}
+
+{{ ckan_confdir }}:
+  file.directory:
+    - user: {{ ckan.ckan_user }}
+    - makedirs: true
+    - recurse:
+      - user
+
+{% set ckan_conffile = [ckan_confdir, 'development.ini']|join('/') %}
+
+make_config:
+  cmd.run:
+    - name: {{ ckan_venv}}/bin/paster make-config ckan {{ ckan_conffile }}
+    - only: test -f {{ ckan_conffile }}
+    - user: {{ ckan.ckan_user }}
+    - require:
+      - pip: ckan
+      - virtualenv: ckan-venv
+      - file: {{ ckan_confdir }}
