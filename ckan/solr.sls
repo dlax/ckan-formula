@@ -23,3 +23,11 @@ solr-schema:
       {% if grains['os'] == 'Debian' %}
       - pkg: solr
       {% endif %}
+
+{% if grains['os'] == 'Debian' %}
+/etc/default/jetty8:
+  file.append:
+    - text: JETTY_PORT=8983
+    - require:
+      - pkg: solr
+{% endif %}
