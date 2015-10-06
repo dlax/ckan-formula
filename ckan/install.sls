@@ -64,7 +64,7 @@ ckan-deps:
 make_config:
   cmd.run:
     - name: {{ ckan_venv}}/bin/paster make-config ckan {{ ckan_conffile }}
-    - only: test -f {{ ckan_conffile }}
+    - onlyif: test -f {{ ckan_conffile }}
     - user: {{ ckan.ckan_user }}
     - require:
       - pip: ckan
