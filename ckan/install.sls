@@ -6,6 +6,7 @@ ckan-user:
     - home: {{ ckan.ckan_home }}
     - createhome: True
     - system: True
+    - shell: /bin/bash
 
 {% set ckan_venv = ckan.ckan_home + '/venv' %}
 
