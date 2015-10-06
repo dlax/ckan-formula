@@ -9,7 +9,7 @@ ckan-user:
 
 {% set ckan_venv = ckan.ckan_home + '/venv' %}
 
-venv:
+ckan-venv:
   pkg.installed:
     - pkgs:
       - python-virtualenv
@@ -33,7 +33,7 @@ ckan:
   pip.installed:
     - editable: {{ ckan_src }}
     - require:
-      - virtualenv: venv
+      - virtualenv: ckan-venv
     - watch:
       - git: ckan-src
 
