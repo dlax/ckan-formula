@@ -69,3 +69,13 @@ make_config:
       - pip: ckan
       - virtualenv: ckan-venv
       - file: {{ ckan_confdir }}
+
+ckan_environmnent:
+  file.managed:
+    - name: {{ ckan_confdir }}/environment.sh
+    - source: salt://ckan/environment.sh
+    - template: jinja
+    - user: {{ ckan.ckan_user }}
+    - mode: 0700
+    - require:
+      - file: {{ ckan_confdir }}

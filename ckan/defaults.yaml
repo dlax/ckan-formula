@@ -4,4 +4,11 @@ ckan:
   ckan_rev: 'ckan-2.4.1'
   ckan_home: '/var/lib/ckan'
   ckan_user: 'ckan'
+  db_host: localhost
+  db_name: ckan_default
+  db_user: ckan_default
+  db_password: pass
+  datastore_db_name: datastore_default
+  datastore_db_user: datastore_default
+  datastore_db_password: pass
   extensions:
