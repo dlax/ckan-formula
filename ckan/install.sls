@@ -80,3 +80,8 @@ ckan_environmnent:
     - mode: 0700
     - require:
       - file: {{ ckan_confdir }}
+
+ckan_user_bashrc:
+  file.append:
+    - name: {{ ckan.ckan_home }}/.bashrc
+    - text: source {{ ckan_confdir }}/environment.sh
