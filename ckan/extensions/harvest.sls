@@ -6,8 +6,9 @@ include:
 redis-server:
   pkg:
     - installed
+    - name: {{ ckan.redis_pkg }}
 
-harvester:
+harvest:
   ckanext.installed:
     - requirements_file: 'pip-requirements.txt'
     - rev: 'master'
