@@ -74,7 +74,7 @@ make_config:
 ckan_environmnent:
   file.managed:
     - name: {{ ckan.confdir }}/environment.sh
-    - source: salt://ckan/environment.sh
+    - source: salt://ckan/files/environment.sh
     - template: jinja
     - user: {{ ckan.ckan_user }}
     - mode: 0700
