@@ -6,9 +6,11 @@ supervisor:
   pkg:
     - installed
 
+{% set supervisor_confdir = '/etc/supervisor/conf.d' %}
+
 supervisor_confdir:
   file.directory:
-    - name: /etc/supervisor/conf.d
+    - name: {{ supervisor_confdir }}
     - require:
       - pkg: supervisor
 
@@ -42,3 +44,13 @@ supervisor_confdir:
       - file: supervisor_confdir
 
 {% endif %}
+
+{{ supervisor_confdir}}/celery.conf:
+  file.managed:
+    - source: salt://ckan/files/celery-supervisor.conf
+    - template: jinja
+    {% if grains['os_family'] != 'Debian' %}
+    - user: {{ ckan.ckan_user }}
+    {% endif %}
+    - require:
+      - file: supervisor_confdir
