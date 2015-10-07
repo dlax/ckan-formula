@@ -5,7 +5,9 @@ supervisor:
   pkg:
     - installed
 
-/etc/supervisor/conf.d:
-  file:
-    - directory
+supervisor_confdir:
+  file.directory:
+    - name: /etc/supervisor/conf.d
+    - require:
+      - pkg: supervisor
 {% endif %}
