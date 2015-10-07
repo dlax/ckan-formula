@@ -8,8 +8,6 @@ ckan-user:
     - system: True
     - shell: /bin/bash
 
-{% set ckan_venv = ckan.ckan_home + '/venv' %}
-
 ckan-venv:
   pkg.installed:
     - pkgs:
@@ -17,7 +15,7 @@ ckan-venv:
       - python-pip
 
   virtualenv.managed:
-    - name: {{ ckan_venv }}
+    - name: {{ ckan.venv_path }}
     - user: {{ ckan.ckan_user }}
     - require:
       - user: ckan-user
@@ -46,7 +44,7 @@ ckan-deps:
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
     - user: {{ ckan.ckan_user }}
-    - bin_env: {{ ckan_venv }}
+    - bin_env: {{ ckan.venv_path }}
     - require:
       - pip: ckan
 
@@ -63,7 +61,7 @@ ckan-deps:
 
 make_config:
   cmd.run:
-    - name: {{ ckan_venv}}/bin/paster make-config ckan {{ ckan_conffile }}
+    - name: {{ ckan.venv_path }}/bin/paster make-config ckan {{ ckan_conffile }}
     - unless: test -f {{ ckan_conffile }}
     - user: {{ ckan.ckan_user }}
     - require:

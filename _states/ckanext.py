@@ -13,6 +13,7 @@ def __virtual__():
 
 
 def _ckan():
+    # XXX duplicate the whole map.jinja logic
     stream = __salt__['cp.get_file_str']('salt://ckan/defaults.yaml')
     default_settings = yaml.load(stream)
     os_family_map = __salt__['grains.filter_by'](
@@ -27,12 +28,12 @@ def _ckan():
         default=default_settings['ckan'],
         merge=True
     )
+    ckan['venv_path'] = ckan['ckan_home'] + '/venv'
     return ckan
 
 
-def installed(name, bin_env, repourl=None, rev=None,
-              requirements_file=None):
-    """Install the `name` CKAN extension into `bin_env` virtual environment.
+def installed(name, repourl=None, rev=None, requirements_file=None):
+    """Install the `name` CKAN extension.
     """
     if rev is None:
         rev = 'master'
@@ -50,6 +51,7 @@ def installed(name, bin_env, repourl=None, rev=None,
     ckan = _ckan()
     srcdir = os.path.join(ckan['src_dir'], fullname)
     user = ckan['ckan_user']
+    bin_env = ckan['venv_path']
     if __opts__['test']:
         ret['comment'] = (
             'would install {0} CKAN extention into {1} virtualenv'.format(

@@ -24,3 +24,6 @@ that differ from whats in defaults.yaml
         merge=True
     )
 %}
+
+{## Custom (project) settings ##}
+{% set ckan['venv_path'] = ckan.ckan_home + '/venv' %}
