@@ -47,7 +47,7 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
     }
     fullname = 'ckanext-' + name
     if repourl is None:
-        repourl = 'https://github.com/ckan/' + fullname
+        repourl = 'git://github.com/ckan/' + fullname
     ckan = _ckan()
     srcdir = os.path.join(ckan['src_dir'], fullname)
     user = ckan['ckan_user']
