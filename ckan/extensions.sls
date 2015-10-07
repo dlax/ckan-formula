@@ -5,46 +5,15 @@ include:
 
 {% for extension, data in ckan.extensions.items() %}
 {% set extname = 'ckanext-' + extension %}
-{% set repourl = data.get('repourl', 'https://github.com/ckan/' + extname) %}
-{% set rev = data.get('rev', None) %}
-{% set srcdir = [ckan.src_dir, extname]|join('/') %}
-{% set requirements_file = [srcdir, data.get('requirements_file', 'requirements.txt')]|join('/') %}
+{% set rev = data.get('rev') %}
+{% set requirements_file = data.get('requirements_file') %}
 {% set ckan_venv = ckan.ckan_home + '/venv' %}  # XXX duplicate declaration from ckan.install
 
 {{ extname }}:
-  git.latest:
-    - name: {{ repourl }}
-    - target: {{ srcdir }}
+  ckanext.installed:
+    - name: {{ extension }}
+    - bin_env: {{ ckan_venv }}
+    - requirements_file: {{ requirements_file }}
     - rev: {{ rev }}
 
-  file.directory:
-    - name: {{ srcdir }}
-    - user: {{ ckan.ckan_user }}
-    - recurse:
-      - user
-    - require:
-      - user: ckan-user
-      - git: {{ extname }}
-
-  pip.installed:
-    - editable: {{ srcdir }}
-    - user: {{ ckan.ckan_user }}
-    - bin_env: {{ ckan_venv }}
-    - require:
-      - virtualenv: ckan-venv
-    - watch:
-      - git: {{ extname }}
-
-{% if salt['file.file_exists'](requirements_file) %}
-{{ extname }}-deps:
-  pip.installed:
-    - requirements: {{ requirements_file }}
-    - user: {{ ckan.ckan_user }}
-    - bin_env: {{ ckan_venv }}
-    - require:
-      - virtualenv: ckan-venv
-      - pip: {{ extname }}
-{% endif %}
-
 {% endfor %}
-
