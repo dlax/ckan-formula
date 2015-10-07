@@ -2,6 +2,7 @@
 
 include:
   - ckan.install
+  - ckan.supervisor
 
 redis-server:
   pkg:
@@ -14,3 +15,10 @@ harvest:
     - rev: 'master'
     - require:
       - virtualenv: {{ ckan.venv_path }}
+
+{% if grains['os_family'] == 'Debian' %}
+/etc/supervisord/conf.d/ckanext-harvest.conf:
+  file.managed:
+    - source: salt://ckan/extensions/files/supervisor-harvest.conf
+    - template: jinja
+{% endif %}

@@ -48,42 +48,40 @@ ckan-deps:
     - require:
       - pip: ckan
 
-{% set ckan_confdir = [ckan.ckan_home, 'etc', 'ckan', 'default']|join('/') %}
-
-{{ ckan_confdir }}:
+{{ ckan.confdir }}:
   file.directory:
     - user: {{ ckan.ckan_user }}
     - makedirs: true
     - recurse:
       - user
 
-{% set ckan_conffile = [ckan_confdir, 'development.ini']|join('/') %}
+{% set ckan_conffile = [ckan.confdir, ckan.conffile]|join('/') %}
 
 make_config:
   cmd.run:
-    - name: {{ ckan.venv_path }}/bin/paster make-config ckan {{ ckan_conffile }}
-    - unless: test -f {{ ckan_conffile }}
+    - name: {{ ckan.venv_path }}/bin/paster make-config ckan {{ ckan.conffile }}
+    - unless: test -f {{ ckan.conffile }}
     - user: {{ ckan.ckan_user }}
     - require:
       - pip: ckan
       - virtualenv: ckan-venv
-      - file: {{ ckan_confdir }}
+      - file: {{ ckan.confdir }}
 
-{{ ckan_confdir}}/who.ini:
+{{ ckan.confdir}}/who.ini:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
 
 ckan_environmnent:
   file.managed:
-    - name: {{ ckan_confdir }}/environment.sh
+    - name: {{ ckan.confdir }}/environment.sh
     - source: salt://ckan/environment.sh
     - template: jinja
     - user: {{ ckan.ckan_user }}
     - mode: 0700
     - require:
-      - file: {{ ckan_confdir }}
+      - file: {{ ckan.confdir }}
 
 ckan_user_bashrc:
   file.append:
     - name: {{ ckan.ckan_home }}/.bashrc
-    - text: source {{ ckan_confdir }}/environment.sh
+    - text: source {{ ckan.confdir }}/environment.sh
