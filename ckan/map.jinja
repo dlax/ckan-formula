@@ -26,4 +26,4 @@ that differ from whats in defaults.yaml
 %}
 
 {## Custom (project) settings ##}
-{% set ckan['venv_path'] = ckan.ckan_home + '/venv' %}
+{% do ckan.update({'venv_path': ckan.ckan_home + '/venv'}) %}
