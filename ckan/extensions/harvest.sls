@@ -40,7 +40,7 @@ harvest_crontab:
     - mode: 0755
     - template: jinja
   pkg.installed:
-    - name: cron
+    - name: {{ ckan.cron_pkg }}
   cron.present:
     - name: bin/ckanext-harvest-run.sh
     - minute: 15
