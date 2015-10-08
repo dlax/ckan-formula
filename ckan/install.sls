@@ -38,7 +38,7 @@ ckan-src:
 
 ckan:
   pip.installed:
-    - editable: {{ ckan_src }}
+    - name: git+file://{{ ckan_src }}@{{ ckan.ckan_rev }}#egg=ckan
     - require:
       - virtualenv: ckan-venv
     - watch:
