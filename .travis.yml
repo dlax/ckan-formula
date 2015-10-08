@@ -6,7 +6,7 @@ env:
   global:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
+    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD --module-dirs=$PWD/_states"
   matrix:
     - STATE=ckan
     - STATE=ckan,ckan.solr,ckan.supervisor,ckan.extensions
@@ -22,7 +22,6 @@ install:
   - sudo salt-call grains.items --local
 
 script:
-  - sudo -E salt-call saltutil.sync_all
   - sudo -E salt-call state.show_sls $STATE $SALT_ARGS
   - sudo -E salt-call state.sls $STATE $SALT_ARGS
 
