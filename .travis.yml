@@ -22,6 +22,7 @@ install:
   - sudo salt-call grains.items --local
 
 script:
+  - sudo -E salt-call saltutil.sync_all
   - sudo -E salt-call state.show_sls $STATE $SALT_ARGS
   - sudo -E salt-call state.sls $STATE $SALT_ARGS
 
