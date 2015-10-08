@@ -3,6 +3,7 @@ ckan:
   ckan_repo: 'https://github.com/ckan/ckan'
   ckan_rev: 'ckan-2.4.1'
   ckan_home: '/var/lib/ckan'
+  scratch_venv: false
   generate_config: false
   conffile: 'development.ini'
   app_instance_secret: ohRPV8+60HS1qZbWkV1KUjATO

@@ -17,6 +17,11 @@ ckan-venv:
       - python-virtualenv
       - python-pip
 
+  {% if ckan.scratch_venv -%}
+  file.absent:
+    - name: {{ ckan.venv_path }}
+  {%- endif %}
+
   virtualenv.managed:
     - name: {{ ckan.venv_path }}
     - user: {{ ckan.ckan_user }}
