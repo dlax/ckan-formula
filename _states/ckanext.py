@@ -85,7 +85,9 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
             cwd=srcdir, rev=rev)
     res = __salt__['file.chown'](srcdir, user=user, group=user)
     ret['changes']['sources ownership'] = 'ok' if res is None else 'ko'
-    res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
+    pkg = 'git+file://{srcdir}@{rev}#egg={fullname}'.format(
+        srcdir=srcdir, rev=rev, fullname=fullname)
+    res = __salt__['pip.install'](pkgs=pkg, user=user, bin_env=bin_env)
     if res['retcode']:
         return failed('pip install', res)
     log('pip install', 'pip installed {0}'.format(fullname))
