@@ -6,8 +6,8 @@ ckan:
   scratch_venv: false
   generate_config: false
   conffile: 'development.ini'
-  app_instance_secret: ohRPV8+60HS1qZbWkV1KUjATO
-  app_instance_uuid: {fabcc2ef-99af-4ca8-8c84-ca1ef1d016a8}
+  app_instance_secret: 'ohRPV8+60HS1qZbWkV1KUjATO'
+  app_instance_uuid: '{fabcc2ef-99af-4ca8-8c84-ca1ef1d016a8}'
   ckan_user: 'ckan'
   site_url: 'http://localhost:5000'
   solr_url: http://127.0.0.1:8983/solr

@@ -3,6 +3,15 @@ ckan:
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     extensions:
-      - qa
-      - harvest
-      - dcat
+      qa:
+        plugins:
+          - qa
+      harvest:
+        plugins:
+          - harvest
+        options:
+          mq.type: redis
+      dcat:
+        plugins:
+          - dcat
+          - dcat_rdf_harvester
