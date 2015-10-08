@@ -1,4 +1,6 @@
 {% from "ckan/map.jinja" import ckan with context %}
+include:
+  - ckan.install
 
 {% set ckan_conffile = [ckan.confdir, ckan.conffile]|join('/') %}
 
@@ -15,6 +17,6 @@ make_config:
 {% else %}
 {{ ckan_conffile }}:
   file.managed:
-    - source: salt://ckan/files/deployment.ini_tmpl
+    - source: salt://ckan/files/deployment.ini
     - template: jinja
 {% endif %}
