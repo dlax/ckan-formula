@@ -62,8 +62,10 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
     def log(change_ctx, msg):
         ret['changes'][change_ctx] = msg
 
-    def failed(*args):
-        log(*args)
+    def failed(change_ctx, res):
+        msg = '\n'.join(
+            ['failed:', res.get('stderr', ''), res.get('stdout', '')])
+        log(change_ctx, msg)
         ret['result'] = False
         return ret
 
@@ -72,7 +74,7 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         if current_rev != rev:
             res = __salt__['git.fetch'](cwd=srcdir)
             if isinstance(res, dict) and res.get('retcode'):
-                return failed('sources update', res['stderr'])
+                return failed('sources update', res)
             log('sources update', res)
             ret['changes']['sources checkout'] = __salt__['git.checkout'](
                 cwd=srcdir, rev=rev)
@@ -81,19 +83,18 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
             cwd=srcdir, repository=repourl)
         ret['changes']['sources checkout'] = __salt__['git.checkout'](
             cwd=srcdir, rev=rev)
-    ret['changes']['sources ownership'] = __salt__['file.chown'](
-        srcdir, user=user, group=user)
+    res = __salt__['file.chown'](srcdir, user=user, group=user)
+    ret['changes']['sources ownership'] = 'ok' if res is None else 'ko'
     res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
     if res['retcode']:
-        return failed('pip install', res['stderr'])
+        return failed('pip install', res)
     log('pip install', 'pip installed {0}'.format(fullname))
     requirements_file = os.path.join(srcdir, requirements_file)
     if os.path.exists(requirements_file):
         res = __salt__['pip.install'](
             requirements=requirements_file, user=user, bin_env=bin_env)
         if res['retcode']:
-            return failed('pip install dependencies', '\n'.join(
-                ['failed:', res['stderr'], res['stdout']]))
+            return failed('pip install dependencies', res)
         log('pip install dependencies',
             'install {0} dependencies from {1}'.format(
                 fullname, requirements_file))
