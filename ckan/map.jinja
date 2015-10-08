@@ -8,9 +8,17 @@ that differ from whats in defaults.yaml
 {% set os_family_map = salt['grains.filter_by']({
         'Debian': {
           'redis_pkg': 'redis-server',
+          'python_dev': 'python-dev',
+          'libxml2_dev': 'libxml2-dev',
+          'libxslt_dev': 'libxslt1-dev',
+          'geos_dev': 'libgeos-c1',
         },
         'RedHat': {
           'redis_pkg': 'redis',
+          'python_dev': 'python-devel',
+          'libxml2_dev': 'libxml2-devel',
+          'libxslt_dev': 'libxslt-devel',
+          'geos_dev': 'geos-devel',
           'solr_home': '/opt/solr',
         },
   }
