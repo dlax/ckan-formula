@@ -70,18 +70,3 @@ ckan-deps:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
     - user: {{ ckan.ckan_user }}
-
-ckan_environmnent:
-  file.managed:
-    - name: {{ ckan.confdir }}/environment.sh
-    - source: salt://ckan/files/environment.sh
-    - template: jinja
-    - user: {{ ckan.ckan_user }}
-    - mode: 0700
-    - require:
-      - file: {{ ckan.confdir }}
-
-ckan_user_bashrc:
-  file.append:
-    - name: {{ ckan.ckan_home }}/.bashrc
-    - text: source {{ ckan.confdir }}/environment.sh
