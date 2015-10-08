@@ -73,6 +73,7 @@ make_config:
 {{ ckan.confdir}}/who.ini:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
+    - user: {{ ckan.ckan_user }}
 
 ckan_environmnent:
   file.managed:
