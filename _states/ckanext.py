@@ -92,7 +92,8 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         res = __salt__['pip.install'](
             requirements=requirements_file, user=user, bin_env=bin_env)
         if res['retcode']:
-            return failed('pip install dependencies', res['stderr'])
+            return failed('pip install dependencies', '\n'.join(
+                ['failed:', res['stderr'], res['stdout']]))
         log('pip install dependencies',
             'install {0} dependencies from {1}'.format(
                 fullname, requirements_file))
