@@ -1,3 +1,8 @@
 ckan:
   lookup:
     ckan_home: /home/ckan
+    src_dir: /home/ckan/src
+    extensions:
+      - qa
+      - harvest
+      - dcat
