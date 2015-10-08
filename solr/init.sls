@@ -1,6 +1,4 @@
+{% if grains['os_family'] == 'Debian' %}
 include:
-  {% if grains['os'] == 'Debian' %}
   - solr.debian
-  {% elif grains['os'] == 'RedHat' %}
-  - solr.redhat
-  {% endif %}
+{% endif %}
