@@ -1,3 +1,5 @@
+{% from "ckan/map.jinja" import ckan with context %}
+
 {% set ckan_conffile = [ckan.confdir, ckan.conffile]|join('/') %}
 
 {% if ckan.generate_config %}
