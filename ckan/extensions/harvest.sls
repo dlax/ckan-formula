@@ -43,5 +43,5 @@ harvest_crontab:
     - name: {{ ckan.cron_pkg }}
   cron.present:
     - name: bin/ckanext-harvest-run.sh
-    - minute: 15
+    - minute: '*/5'
     - user: {{ ckan.ckan_user }}
