@@ -7,6 +7,9 @@ ckan-user:
     - createhome: True
     - system: True
     - shell: /bin/bash
+  file.directory:
+    - name: {{ ckan.ckan_home }}/bin
+    - user: {{ ckan.ckan_user }}
 
 ckan-venv:
   pkg.installed:

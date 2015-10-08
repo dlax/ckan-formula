@@ -31,3 +31,17 @@ harvest:
     {% endif %}
     - require:
       - file: supervisor_confdir
+
+harvest_crontab:
+  file.managed:
+    - name: {{ ckan.ckan_home }}/bin/ckanext-harvest-run.sh
+    - source: salt://ckan/extensions/files/ckanext-harvest-run.sh
+    - user: {{ ckan.ckan_user }}
+    - mode: 0755
+    - template: jinja
+  pkg.installed:
+    - name: cron
+  cron.present:
+    - name: bin/ckanext-harvest-run.sh
+    - minute: 15
+    - user: {{ ckan.ckan_user }}
