@@ -58,18 +58,6 @@ ckan-deps:
     - recurse:
       - user
 
-{% set ckan_conffile = [ckan.confdir, ckan.conffile]|join('/') %}
-
-make_config:
-  cmd.run:
-    - name: {{ ckan.venv_path }}/bin/paster make-config ckan {{ ckan.conffile }}
-    - unless: test -f {{ ckan.conffile }}
-    - user: {{ ckan.ckan_user }}
-    - require:
-      - pip: ckan
-      - virtualenv: ckan-venv
-      - file: {{ ckan.confdir }}
-
 {{ ckan.confdir}}/who.ini:
   file.symlink:
     - target: {{ ckan_src }}/who.ini

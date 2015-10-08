@@ -3,7 +3,10 @@ ckan:
   ckan_repo: 'https://github.com/ckan/ckan'
   ckan_rev: 'ckan-2.4.1'
   ckan_home: '/var/lib/ckan'
+  generate_config: false
   conffile: 'development.ini'
+  app_instance_secret: ohRPV8+60HS1qZbWkV1KUjATO
+  app_instance_uuid: {fabcc2ef-99af-4ca8-8c84-ca1ef1d016a8}
   ckan_user: 'ckan'
   site_url: 'http://localhost:5000'
   db_host: localhost
