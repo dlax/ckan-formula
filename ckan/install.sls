@@ -43,7 +43,7 @@ ckan-deps:
   pkg.installed:
     - pkgs:
       - {{ ckan.python_dev }}
-      - libpq-dev  # required by psycopg2.
+      - {{ ckan.postgresql_libs }}  # required by psycopg2.
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
     - user: {{ ckan.ckan_user }}
