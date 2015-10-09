@@ -9,7 +9,7 @@ env:
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD --module-dirs=$PWD/_states"
   matrix:
     - STATE=ckan
-    - STATE=ckan,ckan.solr,ckan.supervisor,ckan.extensions
+    - STATE=ckan,ckan.solr,ckan.supervisor  #,ckan.extensions
 
 before_install:
   - sudo apt-get update
