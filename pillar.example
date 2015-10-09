@@ -4,6 +4,7 @@ ckan:
     src_dir: /home/ckan/src
     extensions:
       qa:
+        rev: stable
         plugins:
           - qa
       harvest:
@@ -12,6 +13,7 @@ ckan:
         options:
           mq.type: redis
       dcat:
+        repourl: https://github.com/ckan/ckanext-dcat
         plugins:
           - dcat
           - dcat_rdf_harvester

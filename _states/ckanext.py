@@ -35,8 +35,11 @@ def _ckan():
 def installed(name, repourl=None, rev=None, requirements_file=None):
     """Install the `name` CKAN extension.
     """
+    ckan = _ckan()
     if rev is None:
-        rev = 'master'
+        rev = ckan['extensions'].get(name, {}).get('rev', None)
+        if rev is None:
+            rev = 'master'
     if requirements_file is None:
         requirements_file = 'requirements.txt'
     ret = {
@@ -47,8 +50,9 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
     }
     fullname = 'ckanext-' + name
     if repourl is None:
-        repourl = 'git://github.com/ckan/' + fullname
-    ckan = _ckan()
+        repourl = ckan['extensions'].get(name, {}).get('repourl', None)
+        if repourl is None:
+            repourl = 'git://github.com/ckan/' + fullname
     srcdir = os.path.join(ckan['src_dir'], fullname)
     user = ckan['ckan_user']
     bin_env = ckan['venv_path']
