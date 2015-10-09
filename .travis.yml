@@ -6,10 +6,10 @@ env:
   global:
     - BS_PIP_ALLOWED=1
     - BS_ECHO_DEBUG=1
-    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD --module-dirs=$PWD/_states"
+    - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
   matrix:
     - STATE=ckan
-    - STATE=ckan,ckan.solr,ckan.supervisor  #,ckan.extensions
+    - STATE=ckan,ckan.config,ckan.supervisor  #,ckan.extensions,ckan.solr
 
 before_install:
   - sudo apt-get update
