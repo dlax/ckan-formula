@@ -2,6 +2,7 @@
 
 include:
   - ckan.install
+  - ckan.config
 
 dcat:
   ckanext.installed:

@@ -3,6 +3,7 @@
 include:
   - ckan.install
   - ckan.supervisor
+  - ckan.config
 
 redis-server:
   pkg:

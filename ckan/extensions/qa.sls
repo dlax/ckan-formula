@@ -2,6 +2,7 @@
 
 include:
   - ckan.install
+  - ckan.config
   - ckan.extensions.archiver
 
 qa:
