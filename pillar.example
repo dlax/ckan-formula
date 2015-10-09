@@ -19,3 +19,7 @@ ckan:
         plugins:
           - dcat
           - dcat_rdf_harvester
+      spatial:
+        plugins:
+          - spatial_metadata
+          - spatial_query
