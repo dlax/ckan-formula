@@ -3,6 +3,8 @@ ckan:
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     extensions:
+      datastorer:
+        set_logger: true
       qa:
         rev: stable
         plugins:
