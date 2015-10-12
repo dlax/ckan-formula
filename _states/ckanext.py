@@ -54,7 +54,7 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         if repourl is None:
             repourl = 'https://github.com/ckan/' + fullname
     srcdir = os.path.join(ckan['src_dir'], fullname)
-    user = ckan['ckan_user']
+    user, group = ckan['ckan_user'], ckan['ckan_group']
     bin_env = ckan['venv_path']
     if __opts__['test']:
         ret['comment'] = (

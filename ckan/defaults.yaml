@@ -9,6 +9,7 @@ ckan:
   app_instance_secret: 'ohRPV8+60HS1qZbWkV1KUjATO'
   app_instance_uuid: '{fabcc2ef-99af-4ca8-8c84-ca1ef1d016a8}'
   ckan_user: 'ckan'
+  ckan_group: 'ckan'
   site_url: 'http://localhost:5000'
   solr_url: http://127.0.0.1:8983/solr
   db_host: localhost
