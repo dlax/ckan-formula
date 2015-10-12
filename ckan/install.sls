@@ -42,6 +42,9 @@ ckan-src:
     - rev: {{ ckan.ckan_rev }}
     - name: {{ ckan.ckan_repo }}
     - target: {{ ckan_src }}
+  file.directory:
+    - name: {{ ckan_src }}
+    - user: {{ ckan.ckan_user }}
 
 ckan:
   pip.installed:
