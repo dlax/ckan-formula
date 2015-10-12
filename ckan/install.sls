@@ -47,6 +47,7 @@ ckan:
   pip.installed:
     - editable: {{ ckan_src }}
     - bin_env: {{ ckan.venv_path }}
+    - user: {{ ckan.ckan_user }}
     - require:
       - virtualenv: ckan-venv
     - watch:
