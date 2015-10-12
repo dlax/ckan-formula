@@ -88,7 +88,8 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         ret['changes']['sources checkout'] = __salt__['git.checkout'](
             cwd=srcdir, rev=rev)
     res = __salt__['file.chown'](srcdir, user=user, group=user)
-    ret['changes']['sources ownership'] = 'ok' if res is None else 'ko'
+    if res is not None:
+        return failed('sources ownership', res)
     res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
     if res['retcode']:
         return failed('pip install', res)
