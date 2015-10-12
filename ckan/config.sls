@@ -19,5 +19,5 @@ make_config:
   file.managed:
     - source: salt://ckan/files/deployment.ini
     - template: jinja
-    - backup: '.bak'
+    - backup: minion
 {% endif %}
