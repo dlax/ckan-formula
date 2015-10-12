@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/dlax/ckan-formula.svg?branch=master
+    :target: https://travis-ci.org/dlax/ckan-formula
+    
 ============
 ckan-formula
 ============
