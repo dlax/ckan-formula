@@ -52,7 +52,7 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
     if repourl is None:
         repourl = ckan['extensions'].get(name, {}).get('repourl', None)
         if repourl is None:
-            repourl = 'git://github.com/ckan/' + fullname
+            repourl = 'https://github.com/ckan/' + fullname
     srcdir = os.path.join(ckan['src_dir'], fullname)
     user = ckan['ckan_user']
     bin_env = ckan['venv_path']
