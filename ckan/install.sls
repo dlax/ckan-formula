@@ -78,3 +78,4 @@ ckan-deps:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
     - user: {{ ckan.ckan_user }}
+    - force: true
