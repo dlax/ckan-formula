@@ -45,6 +45,8 @@ ckan-src:
   file.directory:
     - name: {{ ckan_src }}
     - user: {{ ckan.ckan_user }}
+    - recurse:
+      - user
 
 ckan:
   pip.installed:
