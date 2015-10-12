@@ -1,14 +1,21 @@
 {% from "ckan/map.jinja" import ckan with context %}
 
+{% set home = salt['user.info'](ckan.ckan_user).get('home', ckan.ckan_home) %}
+
 ckan-user:
   user.present:
     - name: {{ ckan.ckan_user }}
-    - home: {{ ckan.ckan_home }}
+    - home: {{ home }}
     - createhome: True
     - system: True
     - shell: /bin/bash
+
+{{ ckan.ckan_home }}:
   file.directory:
-    - name: {{ ckan.ckan_home }}/bin
+    - user: {{ ckan.ckan_user }}
+
+{{ ckan.ckan_home }}/bin:
+  file.directory:
     - user: {{ ckan.ckan_user }}
 
 ckan-venv:
