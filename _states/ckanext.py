@@ -67,8 +67,12 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         ret['changes'][change_ctx] = msg
 
     def failed(change_ctx, res):
-        msg = '\n'.join(
-            ['failed:', res.get('stderr', ''), res.get('stdout', '')])
+        msg = 'failed'
+        if isinstance(res, dict):
+            msg = '\n'.join(
+                [msg + ':', res.get('stderr', ''), res.get('stdout', '')])
+        else:
+            msg = ': '.join([msg, str(res)])
         log(change_ctx, msg)
         ret['result'] = False
         return ret
