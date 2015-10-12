@@ -20,7 +20,8 @@ harvest:
 {% if grains['os_family'] == 'Debian' %}
 {% set supervisor_confdir = '/etc/supervisor/conf.d/' %}
 {% else %}
-{% set supervisor_confdir = [ckan.confdir, 'supervisor']|join('/') %}
+# XXX duplicate from ckan/supervisor.sls
+{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
 {% endif %}
 
 {{ supervisor_confdir }}/ckanext-harvest.conf:
