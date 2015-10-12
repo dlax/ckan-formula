@@ -23,7 +23,7 @@ supervisor:
       - virtualenv: {{ ckan.venv_path }}
       - user: {{ ckan.ckan_user }}
 
-{% set supervisor_confdir = [ckan.ckan_home, 'supervisor']|join('/') %}
+{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
 
 supervisor_confdir:
   file.directory:
