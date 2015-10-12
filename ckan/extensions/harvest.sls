@@ -44,6 +44,6 @@ harvest_crontab:
   pkg.installed:
     - name: {{ ckan.cron_pkg }}
   cron.present:
-    - name: bin/ckanext-harvest-run.sh
+    - name: {{ ckan.ckan_home }}/bin/ckanext-harvest-run.sh
     - minute: '*/5'
     - user: {{ ckan.ckan_user }}
