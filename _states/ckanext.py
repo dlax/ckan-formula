@@ -77,16 +77,24 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         ret['result'] = False
         return ret
 
+    def git_checkout():
+        ret['changes']['sources checkout'] = __salt__['git.checkout'](
+            cwd=srcdir, rev=rev)
+
     if os.path.isdir(srcdir):
         res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + rev)
+        if isinstance(res, dict) and res.get('retcode'):
+            return failed('sources update', res)
+        log('sources fetch', res)
+        git_checkout()
+        res = __salt__['git.merge'](cwd=srcdir, opts='origin/' + rev)
         if isinstance(res, dict) and res.get('retcode'):
             return failed('sources update', res)
         log('sources update', res)
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl)
-    ret['changes']['sources checkout'] = __salt__['git.checkout'](
-        cwd=srcdir, rev=rev)
+        git_checkout()
     res = __salt__['file.chown'](srcdir, user=user, group=group)
     if res is not None:
         return failed('sources ownership', res)
