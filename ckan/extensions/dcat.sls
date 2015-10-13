@@ -7,6 +7,5 @@ include:
 dcat:
   ckanext.installed:
     - requirements_file: 'requirements.txt'
-    - rev: 'master'
     - require:
       - virtualenv: {{ ckan.venv_path }}
