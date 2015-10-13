@@ -78,19 +78,15 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
         return ret
 
     if os.path.isdir(srcdir):
-        current_rev = __salt__['git.revision'](cwd=srcdir, user=user)
-        if current_rev != rev:
-            res = __salt__['git.fetch'](cwd=srcdir)
-            if isinstance(res, dict) and res.get('retcode'):
-                return failed('sources update', res)
-            log('sources update', res)
-            ret['changes']['sources checkout'] = __salt__['git.checkout'](
-                cwd=srcdir, rev=rev)
+        res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + rev)
+        if isinstance(res, dict) and res.get('retcode'):
+            return failed('sources update', res)
+        log('sources update', res)
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl)
-        ret['changes']['sources checkout'] = __salt__['git.checkout'](
-            cwd=srcdir, rev=rev)
+    ret['changes']['sources checkout'] = __salt__['git.checkout'](
+        cwd=srcdir, rev=rev)
     res = __salt__['file.chown'](srcdir, user=user, group=group)
     if res is not None:
         return failed('sources ownership', res)
