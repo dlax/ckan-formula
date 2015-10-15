@@ -45,6 +45,7 @@ ckan-src:
   file.directory:
     - name: {{ ckan_src }}
     - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
     - recurse:
       - user
       - group
