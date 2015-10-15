@@ -47,6 +47,7 @@ ckan-src:
     - user: {{ ckan.ckan_user }}
     - recurse:
       - user
+      - group
 
 ckan:
   pip.installed:
