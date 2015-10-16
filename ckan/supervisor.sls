@@ -54,3 +54,13 @@ supervisor_confdir:
     {% endif %}
     - require:
       - file: supervisor_confdir
+
+{{ supervisor_confdir}}/ckan.conf:
+  file.managed:
+    - source: salt://ckan/files/ckan-supervisor.conf
+    - template: jinja
+    {% if grains['os_family'] != 'Debian' %}
+    - user: {{ ckan.ckan_user }}
+    {% endif %}
+    - require:
+      - file: supervisor_confdir
