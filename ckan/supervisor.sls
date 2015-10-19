@@ -1,5 +1,8 @@
 {% from "ckan/map.jinja" import ckan with context %}
 
+include:
+  - ckan.install
+
 {% if grains['os_family'] == 'Debian' %}
 
 supervisor:
