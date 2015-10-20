@@ -1,8 +1,11 @@
-{% from "ckan/map.jinja" import ckan,solr with context %}
+{% from "ckan/map.jinja" import ckan, solr, supervisor_confdir with context %}
 
 include:
-  - ckan.install
   - solr
+  - ckan.install
+{% if grains['os_family'] == 'RedHat' %}
+  - ckan.supervisor
+{% endif %}
 
 solr-schema:
   file.copy:
@@ -23,6 +26,17 @@ solr-schema:
       {% elif grains['os_family'] == 'RedHat' %}
       - archive: solr
       {% endif %}
+
+{% if grains['os_family'] == 'RedHat' %}
+{{ supervisor_confdir }}/solr.conf:
+  file.managed:
+    - source: salt://solr/files/solr-supervisor.conf
+    - template: jinja
+    - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
+    - require:
+      - file: supervisor_confdir
+{% endif %}
 
 {% if grains['os_family'] == 'Debian' %}
 /etc/default/jetty8:
