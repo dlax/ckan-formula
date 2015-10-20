@@ -64,3 +64,9 @@ that differ from whats in defaults.yaml
     'home': [solr_dist_dir, 'example']|join('/'),
     })
   %}
+
+{% if grains['os_family'] == 'Debian' %}
+{% set supervisor_confdir = '/etc/supervisor/conf.d' %}
+{% elif grains['os_family'] == 'RedHat' %}
+{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
+{% endif %}

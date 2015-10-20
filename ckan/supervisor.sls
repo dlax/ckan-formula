@@ -1,4 +1,4 @@
-{% from "ckan/map.jinja" import ckan with context %}
+{% from "ckan/map.jinja" import ckan, supervisor_confdir with context %}
 
 include:
   - ckan.install
@@ -9,15 +9,13 @@ supervisor:
   pkg:
     - installed
 
-{% set supervisor_confdir = '/etc/supervisor/conf.d' %}
-
 supervisor_confdir:
   file.directory:
     - name: {{ supervisor_confdir }}
     - require:
       - pkg: supervisor
 
-{% else %}
+{% elif grains['os_family'] == 'RedHat' %}
 
 supervisor:
   pip.installed:
@@ -25,8 +23,6 @@ supervisor:
     - require:
       - virtualenv: {{ ckan.venv_path }}
       - user: {{ ckan.ckan_user }}
-
-{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
 
 supervisor_confdir:
   file.directory:
@@ -48,7 +44,7 @@ supervisor_confdir:
 
 {% endif %}
 
-{{ supervisor_confdir}}/celery.conf:
+{{ supervisor_confdir }}/celery.conf:
   file.managed:
     - source: salt://ckan/files/celery-supervisor.conf
     - template: jinja
@@ -58,7 +54,7 @@ supervisor_confdir:
     - require:
       - file: supervisor_confdir
 
-{{ supervisor_confdir}}/ckan.conf:
+{{ supervisor_confdir }}/ckan.conf:
   file.managed:
     - source: salt://ckan/files/ckan-supervisor.conf
     - template: jinja
