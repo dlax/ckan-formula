@@ -1,4 +1,4 @@
-{% from "ckan/map.jinja" import ckan with context %}
+{% from "ckan/map.jinja" import ckan,solr with context %}
 
 include:
   - ckan.install
@@ -12,9 +12,7 @@ solr-schema:
     - watch_in:
       - service: solr
     {% elif grains['os_family'] == 'RedHat' %}
-    - name: {{ ckan.solr_home }}/collection1/conf/schema.xml
-    - user: tomcat
-    - group: tomcat
+    - name: {{ solr.home }}/collection1/conf/schema.xml
     {% endif %}
     - force: True
     - makedirs: True
@@ -22,6 +20,8 @@ solr-schema:
       - git: ckan-src
       {% if grains['os_family'] == 'Debian' %}
       - pkg: solr
+      {% elif grains['os_family'] == 'RedHat' %}
+      - archive: solr
       {% endif %}
 
 {% if grains['os_family'] == 'Debian' %}

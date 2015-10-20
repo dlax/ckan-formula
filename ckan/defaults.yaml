@@ -20,3 +20,8 @@ ckan:
   datastore_db_user: datastore_default
   datastore_db_password: pass
   extensions:
+
+solr:
+  apache_mirror: http://mirrors.ircam.fr/pub/apache/
+  release: 4.10.4
+  md5: 8ae107a760b3fc1ec7358a303886ca06

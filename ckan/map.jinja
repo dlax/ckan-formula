@@ -24,7 +24,6 @@ that differ from whats in defaults.yaml
           'libxml2_dev': 'libxml2-devel',
           'libxslt_dev': 'libxslt-devel',
           'geos_dev': 'geos-devel',
-          'solr_home': '/opt/solr',
         },
   }
   , grain="os_family"
@@ -40,6 +39,12 @@ that differ from whats in defaults.yaml
         merge=True
     )
 %}
+{% set solr = salt['pillar.get'](
+        'solr',
+        default=default_settings.solr,
+        merge=True
+    )
+%}
 
 {## Custom (project) settings ##}
 {% do ckan.update({
@@ -47,3 +52,15 @@ that differ from whats in defaults.yaml
     'confdir': [ckan.ckan_home, 'etc', 'ckan', 'default']|join('/')
     })
 %}
+
+{% set dist_dir = [ckan.ckan_home, 'dist']|join('/') %}
+{% set solr_dist = 'solr-' + solr.release %}
+{% set solr_dist_dir = [dist_dir, solr_dist]|join('/') %}
+
+{% do solr.update({
+    'base_dist_dir': dist_dir,
+    'dist': solr_dist,
+    'dist_dir': solr_dist_dir,
+    'home': [solr_dist_dir, 'example', 'solr']|join('/'),
+    })
+  %}
