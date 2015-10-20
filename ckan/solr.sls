@@ -12,7 +12,7 @@ solr-schema:
     - watch_in:
       - service: solr
     {% elif grains['os_family'] == 'RedHat' %}
-    - name: {{ solr.home }}/collection1/conf/schema.xml
+    - name: {{ solr.home }}/solr/collection1/conf/schema.xml
     {% endif %}
     - force: True
     - makedirs: True
