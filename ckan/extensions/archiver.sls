@@ -14,7 +14,7 @@ packages_deps:
 archiver:
   ckanext.installed:
     - requirements_file: 'pip-requirements.txt'
-    - rev: 'master'
+    - rev: '6e555f5a06b515135fc85445de529a4a0ef5dac0'
     - require:
       - virtualenv: {{ ckan.venv_path }}
       - pkg: packages_deps
