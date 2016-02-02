@@ -62,7 +62,8 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
         return ret
 
     def log(change_ctx, msg):
-        ret['changes'][change_ctx] = msg
+        if msg:
+            ret['changes'][change_ctx] = msg
 
     def failed(change_ctx, res):
         msg = 'failed'
@@ -76,8 +77,13 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
         return ret
 
     def git_checkout():
-        ret['changes']['sources checkout'] = __salt__['git.checkout'](
-            cwd=srcdir, rev=rev)
+        res = __salt__['git.checkout'](cwd=srcdir, rev=rev)
+        if isinstance(res, dict) and res.get('retcode'):
+            return failed('sources checkout', res)
+        res = __salt__['git.revision'](cwd=srcdir).strip()
+        if res != rev.strip():
+            return failed('git revision', '{0} != {1}'.format(res, rev))
+        log('git revision', res)
 
     if os.path.isdir(srcdir):
         res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + branch)
@@ -85,10 +91,6 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
             return failed('sources update', res)
         log('sources fetch', res)
         git_checkout()
-        #res = __salt__['git.merge'](cwd=srcdir, opts='origin/' + branch)
-        #if isinstance(res, dict) and res.get('retcode'):
-            #return failed('sources update', res)
-        #log('sources update', res)
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl)
