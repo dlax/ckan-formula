@@ -13,6 +13,8 @@ ckan:
         rev: stable
         plugins:
           - qa
+          - archiver
+          - report
       harvest:
         plugins:
           - harvest

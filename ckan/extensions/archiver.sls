@@ -3,6 +3,7 @@
 include:
   - ckan.install
   - ckan.config
+  - ckan.extensions.report
 
 
 packages_deps:
@@ -13,7 +14,7 @@ packages_deps:
 
 archiver:
   ckanext.installed:
-    - requirements_file: 'pip-requirements.txt'
+    - requirements_file: 'requirements.txt'
     - rev: 'master'
     - require:
       - virtualenv: {{ ckan.venv_path }}
