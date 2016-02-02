@@ -10,7 +10,7 @@ ckan:
       datastorer:
         set_logger: true
       qa:
-        rev: stable
+        branch: stable
         plugins:
           - qa
       harvest:

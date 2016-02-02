@@ -32,14 +32,12 @@ def _ckan():
     return ckan
 
 
-def installed(name, repourl=None, rev=None, requirements_file=None):
+def installed(name, repourl=None, branch='master', rev=None, requirements_file=None):
     """Install the `name` CKAN extension.
     """
     ckan = _ckan()
     if rev is None:
-        rev = ckan['extensions'].get(name, {}).get('rev', None)
-        if rev is None:
-            rev = 'master'
+        rev = ckan['extensions'].get(name, {}).get('rev', branch)
     if requirements_file is None:
         requirements_file = 'requirements.txt'
     ret = {
@@ -82,15 +80,15 @@ def installed(name, repourl=None, rev=None, requirements_file=None):
             cwd=srcdir, rev=rev)
 
     if os.path.isdir(srcdir):
-        res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + rev)
+        res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + branch)
         if isinstance(res, dict) and res.get('retcode'):
             return failed('sources update', res)
         log('sources fetch', res)
         git_checkout()
-        res = __salt__['git.merge'](cwd=srcdir, opts='origin/' + rev)
-        if isinstance(res, dict) and res.get('retcode'):
-            return failed('sources update', res)
-        log('sources update', res)
+        #res = __salt__['git.merge'](cwd=srcdir, opts='origin/' + branch)
+        #if isinstance(res, dict) and res.get('retcode'):
+            #return failed('sources update', res)
+        #log('sources update', res)
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl)

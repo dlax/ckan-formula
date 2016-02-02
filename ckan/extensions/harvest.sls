@@ -13,7 +13,6 @@ redis-server:
 harvest:
   ckanext.installed:
     - requirements_file: 'pip-requirements.txt'
-    - rev: 'master'
     - require:
       - virtualenv: {{ ckan.venv_path }}
 
