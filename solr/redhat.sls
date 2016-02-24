@@ -4,6 +4,7 @@ solr:
   pkg.installed:
      - pkgs:
        - java-1.7.0-openjdk
+       - tar
 
   file.directory:
     - name: {{ solr.base_dist_dir }}

@@ -6,7 +6,10 @@ include:
 
 geos-devel:
   pkg.installed:
-    - name: {{ ckan.geos_dev }}
+    - pkgs:
+      - {{ ckan.geos_dev }}
+      - {{ ckan.libxml2_dev }}
+      - {{ ckan.libxslt_dev }}
 
 spatial:
   ckanext.installed:
