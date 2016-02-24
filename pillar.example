@@ -13,6 +13,12 @@ ckan:
         branch: stable
         plugins:
           - qa
+      report:
+        plugins:
+          - report
+      archiver:
+        plugins:
+          - archiver
       harvest:
         plugins:
           - harvest
