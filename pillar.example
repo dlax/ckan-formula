@@ -7,8 +7,6 @@ ckan:
       - multilingual_group
       - multilingual_tag
     extensions:
-      datastorer:
-        set_logger: true
       qa:
         branch: stable
         plugins:
