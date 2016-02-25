@@ -10,6 +10,7 @@ geos-devel:
       - {{ ckan.geos_dev }}
       - {{ ckan.libxml2_dev }}
       - {{ ckan.libxslt_dev }}
+      - gcc
 
 spatial:
   ckanext.installed:

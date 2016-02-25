@@ -66,7 +66,8 @@ ckan-deps:
       - {{ ckan.python_dev }}
       - {{ ckan.postgresql_libs }}  # required by psycopg2.
       {% if grains['os_family'] == 'RedHat' -%}
-      - {{ ckan.postgresql_devel }}  # pg_config is here on RedHat.
+      - {{ ckan.postgresql_contrib }}  # pg_config is here on RedHat.
+      - {{ ckan.postgresql_devel }}
       {% endif %}
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
