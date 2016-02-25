@@ -60,6 +60,29 @@ ckan:
     - watch:
       - git: ckan-src
 
+{% if grains['os_family'] == 'RedHat' -%}
+postgresql-repo:
+  # copied from https://github.com/saltstack-formulas/postgres-formula/blob/master/postgres/upstream.sls
+  file.managed:
+    - name: /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+    - source: https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG
+    - source_hash: md5=78b5db170d33f80ad5a47863a7476b22
+  pkgrepo.managed:
+    - name: pgdg-9.4-centos
+    - order: 1
+    - humanname: PostgreSQL 9.4 $releasever - $basearch
+    - baseurl: https://download.postgresql.org/pub/repos/yum/9.4/redhat/rhel-$releasever-$basearch
+    - gpgcheck: 1
+    - gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+    - require:
+      - file: postgresql-repo
+
+/etc/profile.d/pgsql.sh:
+  file.managed:
+    - contents:
+      - export PATH=/usr/pgsql-9.4/bin:$PATH
+{% endif %}
+
 ckan-deps:
   pkg.installed:
     - pkgs:
@@ -68,6 +91,10 @@ ckan-deps:
       {% if grains['os_family'] == 'RedHat' -%}
       - {{ ckan.postgresql_devel }}  # pg_config is here on RedHat.
       {% endif %}
+    {% if grains['os_family'] == 'RedHat' -%}
+    - require:
+      - pkgrepo: postgresql-repo
+    {% endif %}
   pip.installed:
     - requirements: {{ ckan_src }}/requirements.txt
     - user: {{ ckan.ckan_user }}
