@@ -23,8 +23,9 @@ ckan:
       harvest:
         plugins:
           - harvest
+          - ckan_harvester
         options:
-          ckan.mq.type: redis
+          ckan.harvest.mq.type: redis
       dcat:
         repourl: https://github.com/ckan/ckanext-dcat
         plugins:
