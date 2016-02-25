@@ -4,11 +4,7 @@ include:
   - ckan.install
   - ckan.supervisor
   - ckan.config
-
-redis-server:
-  pkg:
-    - installed
-    - name: {{ ckan.redis_pkg }}
+  - ckan.redis_install
 
 harvest:
   ckanext.installed:

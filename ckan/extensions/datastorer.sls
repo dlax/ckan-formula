@@ -7,6 +7,7 @@ include:
 datastorer:
   ckanext.installed:
     - requirements_file: 'pip-requirements.txt'
-    - rev: '0808e1faedb92c34a87c7a206115b7837fef6675'
+    - branch: datalocale
+    - rev: '8ff51edea08b321550f6d950ea99eee4394df57e'
     - require:
       - virtualenv: {{ ckan.venv_path }}

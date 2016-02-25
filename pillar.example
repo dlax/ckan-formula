@@ -19,6 +19,9 @@ ckan:
       archiver:
         plugins:
           - archiver
+        settings:
+          cache_archive_dir: /var/www/ckan-resources
+          cache_url_root: http://localhost:9876/resources
       harvest:
         plugins:
           - harvest
