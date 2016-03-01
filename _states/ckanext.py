@@ -36,8 +36,9 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     """Install the `name` CKAN extension.
     """
     ckan = _ckan()
-    if rev is None:
-        rev = ckan['extensions'].get(name, {}).get('rev', branch)
+    # Consider 'rev' from pillar first, then state value and default to branch
+    # name.
+    rev = ckan['extensions'].get(name, {}).get('rev', rev or branch)
     if requirements_file is None:
         requirements_file = 'requirements.txt'
     ret = {
@@ -76,32 +77,35 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
         ret['result'] = False
         return ret
 
-    def git_checkout():
-        res = __salt__['git.checkout'](cwd=srcdir, rev=rev)
-        if isinstance(res, dict) and res.get('retcode'):
-            return failed('sources checkout', res)
-        res = __salt__['git.revision'](cwd=srcdir).strip()
-        if res != rev.strip():
-            return failed('git revision', '{0} != {1}'.format(res, rev))
-        log('git revision', res)
-
+    # Fetch or clone.
     if os.path.isdir(srcdir):
+        # TODO handle change in remote.
         res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + branch)
         if isinstance(res, dict) and res.get('retcode'):
             return failed('sources update', res)
         log('sources fetch', res)
-        git_checkout()
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl)
-        git_checkout()
+
+    # Now git checkout step.
+    res = __salt__['git.checkout'](cwd=srcdir, rev=rev)
+    if isinstance(res, dict) and res.get('retcode'):
+        return failed('sources checkout', res)
+    res = __salt__['git.revision'](cwd=srcdir).strip()
+    log('git revision', res)
+    if res != rev.strip():
+        return failed('git revision', '{0} != {1}'.format(res, rev))
+
     res = __salt__['file.chown'](srcdir, user=user, group=group)
     if res is not None:
         return failed('sources ownership', res)
+
     res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
     if res['retcode']:
         return failed('pip install', res)
     log('pip install', 'pip installed {0}'.format(fullname))
+
     requirements_file = os.path.join(srcdir, requirements_file)
     if os.path.exists(requirements_file):
         res = __salt__['pip.install'](
