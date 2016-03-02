@@ -36,3 +36,13 @@ archiver:
     {% endif %}
     - require:
       - file: supervisor_confdir
+
+{{ supervisor_confdir }}/archive-server.conf:
+  file.managed:
+    - source: salt://ckan/extensions/files/archive-server.conf
+    - template: jinja
+    {% if grains['os_family'] != 'Debian' %}
+    - user: {{ ckan.ckan_user }}
+    {% endif %}
+    - require:
+      - file: supervisor_confdir

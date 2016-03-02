@@ -18,8 +18,8 @@ ckan:
         plugins:
           - archiver
         options:
-          ckanext-archiver.cache_archive_dir: /var/www/ckan-resources
-          ckanext-archiver-cache_url_root: http://localhost:9876/resources
+          ckanext-archiver.archive_dir: /var/www/ckan-resources
+          ckanext-archiver.cache_url_root: http://localhost:9876/resources
       harvest:
         plugins:
           - harvest
