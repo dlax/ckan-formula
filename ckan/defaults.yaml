@@ -1,7 +1,7 @@
 ckan:
   src_dir: '/usr/local/src'
   ckan_repo: 'https://github.com/ckan/ckan'
-  ckan_rev: 'ckan-2.4.1'
+  ckan_rev: 'ckan-2.5.1'
   ckan_home: '/var/lib/ckan'
   scratch_venv: false
   generate_config: false
@@ -19,6 +19,7 @@ ckan:
   datastore_db_name: datastore_default
   datastore_db_user: datastore_default
   datastore_db_password: pass
+  standard_plugins:
   extensions:
 
 solr:
