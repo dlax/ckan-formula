@@ -19,10 +19,21 @@ supervisor_confdir:
 
 supervisor:
   pip.installed:
-    - bin_env: {{ ckan.venv_path }}
+    - user: {{ ckan.ckan_user }}
+    - install_options:
+      - --user
     - require:
-      - virtualenv: {{ ckan.venv_path }}
       - user: {{ ckan.ckan_user }}
+
+{% for fname in ('supervisorctl', 'supervisord') %}
+{{ ckan.ckan_home }}/bin/{{ fname }}:
+  file.symlink:
+    - target: {{ ckan.ckan_home }}/.local/bin/{{ fname }}
+    - user: {{ ckan.ckan_user }}
+    - makedirs: true
+    - require:
+      - pip: supervisor
+{% endfor %}
 
 supervisor_confdir:
   file.directory:
