@@ -9,6 +9,13 @@ ckan-user:
     - createhome: True
     - system: True
     - shell: /bin/bash
+  group.present:
+    - name: {{ ckan.ckan_group }}
+    - system: True
+    - addusers:
+      - {{ ckan.ckan_user }}
+    - require:
+      - user: ckan-user
 
 {{ ckan.ckan_home }}:
   file.directory:
