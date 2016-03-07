@@ -43,3 +43,19 @@ harvest_crontab:
     - name: {{ ckan.ckan_home }}/bin/ckanext-harvest-run.sh
     - minute: '*/15'
     - user: {{ ckan.ckan_user }}
+
+{% if grains['pythonversion'][:2] < [2, 7] %}
+libffi-dev:
+  pkg.installed:
+    - name: {{ ckan.libffi_dev }}
+
+{% for pippkg in ['pyopenssl', 'ndg-httpsclient', 'pyasn1'] %}
+{{ pippkg }}:
+  pip.installed:
+    - bin_env: {{ ckan.venv_path }}
+    - user: {{ ckan.ckan_user }}
+    - require:
+      - ckanext: harvest
+      - pkg: libffi-dev
+{% endfor %}
+{% endif %}
