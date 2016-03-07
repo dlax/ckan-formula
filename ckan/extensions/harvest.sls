@@ -45,9 +45,11 @@ harvest_crontab:
     - user: {{ ckan.ckan_user }}
 
 {% if grains['pythonversion'][:2] < [2, 7] %}
-libffi-dev:
+ssl-sni-deps:
   pkg.installed:
-    - name: {{ ckan.libffi_dev }}
+    - pkgs:
+      - {{ ckan.libffi_dev }}
+      - {{ ckan.libssl_dev }}
 
 {% for pippkg in ['pyopenssl', 'ndg-httpsclient', 'pyasn1'] %}
 {{ pippkg }}:
@@ -56,6 +58,6 @@ libffi-dev:
     - user: {{ ckan.ckan_user }}
     - require:
       - ckanext: harvest
-      - pkg: libffi-dev
+      - pkg: ssl-sni-deps
 {% endfor %}
 {% endif %}
