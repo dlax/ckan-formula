@@ -7,7 +7,7 @@ include:
 
 qa:
   ckanext.installed:
-    - requirements_file: 'pip-requirements.txt'
-    - rev: 'ca9aaaa6adc30c1295fc7786a5741bf6477ea5a7'
+    - requirements_file: 'requirements.txt'
+    - rev: '350b40221176cd140f1da04329e0427678c7bfcb'
     - require:
       - virtualenv: {{ ckan.venv_path }}

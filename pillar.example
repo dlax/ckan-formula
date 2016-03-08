@@ -8,7 +8,6 @@ ckan:
       - multilingual_tag
     extensions:
       qa:
-        branch: stable
         plugins:
           - qa
       report:
