@@ -73,5 +73,5 @@ that differ from whats in defaults.yaml
 {% if grains['os_family'] == 'Debian' %}
 {% set supervisor_confdir = '/etc/supervisor/conf.d' %}
 {% elif grains['os_family'] == 'RedHat' %}
-{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
+{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor.d']|join('/') %}
 {% endif %}

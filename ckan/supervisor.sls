@@ -35,6 +35,10 @@ supervisor:
       - pip: supervisor
 {% endfor %}
 
+remove old supervisor dir:
+  file.absent:
+    - name: {{ [ckan.ckan_home, 'etc', 'supervisor']|join('/') }}
+
 supervisor_confdir:
   file.directory:
     - name: {{ supervisor_confdir }}
@@ -43,15 +47,13 @@ supervisor_confdir:
       - file: {{ ckan.confdir }}
       - user: {{ ckan.ckan_user }}
 
-{{ supervisor_confdir }}/supervisord.conf:
+{{ ckan.ckan_home }}/etc/supervisord.conf:
   file.managed:
     - source: salt://ckan/files/supervisord.conf
     - template: jinja
-    - context:
-        supervisor_confdir: {{ supervisor_confdir }}
     - user: {{ ckan.ckan_user }}
     - require:
-      - file: supervisor_confdir
+      - file: {{ ckan.confdir }}
 
 {% endif %}
 

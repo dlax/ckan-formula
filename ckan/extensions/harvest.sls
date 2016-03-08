@@ -1,4 +1,4 @@
-{% from "ckan/map.jinja" import ckan with context %}
+{% from "ckan/map.jinja" import ckan, supervisor_confdir with context %}
 
 include:
   - ckan.install
@@ -12,13 +12,6 @@ harvest:
     - rev: '7f506913f8e78988899af9c1dd518dc76e2c3e62'
     - require:
       - virtualenv: {{ ckan.venv_path }}
-
-{% if grains['os_family'] == 'Debian' %}
-{% set supervisor_confdir = '/etc/supervisor/conf.d/' %}
-{% else %}
-# XXX duplicate from ckan/supervisor.sls
-{% set supervisor_confdir = [ckan.ckan_home, 'etc', 'supervisor']|join('/') %}
-{% endif %}
 
 {{ supervisor_confdir }}/ckanext-harvest.conf:
   file.managed:
