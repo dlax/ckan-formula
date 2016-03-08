@@ -42,6 +42,14 @@ ckan-venv:
     - require:
       - user: ckan-user
 
+  pip.installed:
+    - name: pip
+    - upgrade: true
+    - bin_env: {{ ckan.venv_path }}
+    - user: {{ ckan.ckan_user }}
+    - require:
+      - virtualenv: ckan-venv
+
 {% set ckan_src = ckan.src_dir + '/ckan' %}
 
 ckan-src:
