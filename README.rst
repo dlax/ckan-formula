@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/dlax/ckan-formula.svg?branch=master
-    :target: https://travis-ci.org/dlax/ckan-formula
+.. image:: https://travis-ci.org/logilab/ckan-formula.svg?branch=master
+    :target: https://travis-ci.org/logilab/ckan-formula
     
 ============
 ckan-formula
