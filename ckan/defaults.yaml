@@ -20,7 +20,37 @@ ckan:
   datastore_db_user: datastore_default
   datastore_db_password: pass
   standard_plugins:
+  install_extensions:
   extensions:
+    qa:
+      rev: '350b40221176cd140f1da04329e0427678c7bfcb'
+      plugins:
+        - qa
+    report:
+      repourl: https://github.com/datagovuk/ckanext-report
+      rev: '3156c9db68bd663a08357cabf03eb01667e969e9'
+      plugins:
+        - report
+    archiver:
+      rev: 'd570c348bfb4070ec178d4745edf8bec8d8e1810'
+      plugins:
+        - archiver
+    harvest:
+      rev: '7f506913f8e78988899af9c1dd518dc76e2c3e62'
+      plugins:
+        - harvest
+        - ckan_harvester
+      options:
+        ckan.harvest.mq.type: redis
+    dcat:
+      rev: '54f6366a5c6368e70cc136b32fe7b2006f30ee27'
+      plugins:
+        - dcat
+    spatial:
+      rev: 'f6cf9cd3f00945b29d6df6d16d7487651811cbf8'
+      plugins:
+        - spatial_metadata
+        - spatial_query
 
 solr:
   apache_mirror: http://mirrors.ircam.fr/pub/apache/

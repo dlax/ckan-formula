@@ -9,7 +9,6 @@ include:
 harvest:
   ckanext.installed:
     - requirements_file: 'pip-requirements.txt'
-    - rev: '7f506913f8e78988899af9c1dd518dc76e2c3e62'
     - require:
       - virtualenv: {{ ckan.venv_path }}
 

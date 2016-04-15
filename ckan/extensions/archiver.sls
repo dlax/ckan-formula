@@ -15,7 +15,6 @@ packages_deps:
 
 archiver:
   ckanext.installed:
-    - rev: 'd570c348bfb4070ec178d4745edf8bec8d8e1810'
     - require:
       - virtualenv: {{ ckan.venv_path }}
       - pkg: packages_deps
