@@ -9,6 +9,7 @@ env:
     - SALT_ARGS="-l debug --local --retcode-passthrough --pillar-root=test/pillar --file-root=$PWD"
   matrix:
     - STATE=ckan
+    - STATE=ckan,ckan.config,ckan.extensions
     - STATE=ckan,ckan.config,ckan.supervisor,ckan.apache  #,ckan.extensions,ckan.solr
 
 before_install:
