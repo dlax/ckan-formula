@@ -12,6 +12,7 @@ ckan:
   ckan_group: 'ckan'
   site_url: 'http://localhost:5000'
   solr_url: http://127.0.0.1:8983/solr
+  licenses_group_url: http://licenses.opendefinition.org/licenses/groups/ckan.json
   db_host: localhost
   db_name: ckan_default
   db_user: ckan_default
