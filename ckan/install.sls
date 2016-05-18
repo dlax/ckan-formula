@@ -65,6 +65,12 @@ ckan-src:
       - user
       - group
 
+{% if grains['os_family'] == 'RedHat' -%}
+gcc:
+  pkg:
+    - installed
+{% endif -%}
+
 ckan:
   pip.installed:
     - editable: {{ ckan_src }}
@@ -72,6 +78,9 @@ ckan:
     - user: {{ ckan.ckan_user }}
     - require:
       - virtualenv: ckan-venv
+    {% if grains['os_family'] == 'RedHat' %}
+      - pkg: gcc
+    {% endif %}
     - watch:
       - git: ckan-src
 
