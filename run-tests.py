@@ -58,12 +58,10 @@ def build(args, remain):
 
 
 def test(args, remain):
-    raise NotImplementedError
-    tag = get_tag(args.image, True)
+    """Build a salted docker image and ensure this succeeded."""
     _build(args.image, True)
-
-    import pytest
-    return pytest.main(["--docker-image", tag] + remain)
+    tag = get_tag(args.image, True)
+    assert image_exists(tag)
 
 
 def dev(args, remain):
