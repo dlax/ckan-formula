@@ -6,6 +6,9 @@ ckan:
       - multilingual_dataset
       - multilingual_group
       - multilingual_tag
+    multilingual_lang:
+      - english
+      - french
     extensions:
       qa:
         plugins:

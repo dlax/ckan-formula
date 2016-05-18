@@ -32,8 +32,11 @@ solr-schema:
       {% endif %}
 
 {% if 'multilingual_dataset' in salt['pillar.get']('ckan:lookup:standard_plugins')  %}
-{% set multilingual_dir = [ckan.src_dir, 'ckan/ckanext/multilingual/solr']|join('/') -%}
-{% for stop_filename in salt['file.readdir'](multilingual_dir) if stop_filename.endswith('.txt') %}
+{% for lang in ckan.get('multilingual_lang') -%}
+{% set stop_filename = lang + '_stop.txt' -%}
+{% set stop_filepath = [ckan.src_dir,
+                        'ckan/ckanext/multilingual/solr',
+                        stop_filename]|join('/') -%}
 {{ stop_filename }}:
   file.copy:
     - source: {{ ckan.src_dir }}/ckan/ckanext/multilingual/solr/{{ stop_filename }}
