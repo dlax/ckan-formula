@@ -7,4 +7,5 @@ RUN yum -y install epel-release && \
     yum -y install salt-minion python-pygit2 git
 
 ENV LANG en_US.UTF-8
+ENV SHELL /bin/bash
 CMD ["/sbin/init"]
