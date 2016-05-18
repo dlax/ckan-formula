@@ -84,6 +84,15 @@ ckan:
     - watch:
       - git: ckan-src
 
+{% if grains['os_family'] == 'RedHat' -%}
+ckan_user_bash_profile:
+  file.append:
+    - name: {{ home }}/.bash_profile
+    - text: |
+        PATH=/usr/pgsql-9.4/bin/:$PATH
+        export PATH
+{% endif %}
+
 ckan-deps:
   pkg.installed:
     - pkgs:
@@ -100,6 +109,9 @@ ckan-deps:
     - bin_env: {{ ckan.venv_path }}
     - require:
       - pip: ckan
+      {% if grains['os_family'] == 'RedHat' -%}
+      - file: ckan_user_bash_profile
+      {% endif %}
 
 {{ ckan.confdir }}:
   file.directory:
