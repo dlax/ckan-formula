@@ -8,4 +8,4 @@ env:
   matrix:
     - IMAGE=centos6
 script:
-  - ./run-tests.py build $IMAGE -v
+  - ./run-tests.py build $IMAGE -v --salt
