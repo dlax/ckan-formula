@@ -31,6 +31,12 @@ archiver:
     - require:
       - file: supervisor_confdir
 
+{{ ckan.extensions.archiver.options.get('ckanext-archiver.archive_dir', '/tmp/archive') }}:
+  file.directory:
+    - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
+    - makedirs: true
+
 {{ supervisor_confdir }}/archive-server.conf:
   file.managed:
     - source: salt://ckan/extensions/files/archive-server.conf
