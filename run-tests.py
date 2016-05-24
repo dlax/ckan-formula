@@ -41,7 +41,9 @@ def _build(image, salt=False):
             b"ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"
             b"ADD test/salt /srv/salt\n"
             b"ADD test/pillar /srv/pillar\n"
-            b"ADD . /srv/formula\n"
+            b"ADD ckan /srv/formula/ckan\n"
+            b"ADD solr /srv/formula/solr\n"
+            b"ADD _states /srv/formula/_states\n"
             b"RUN salt-call -l debug state.highstate\n"
             #b"RUN PATH=/usr/pgsql-9.4/bin/:$PATH salt-call state.highstate\n"
         )
