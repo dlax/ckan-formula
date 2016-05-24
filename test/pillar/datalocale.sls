@@ -2,13 +2,7 @@ ckan:
   lookup:
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
-    standard_plugins:
-      - multilingual_dataset
-      - multilingual_group
-      - multilingual_tag
-    multilingual_lang:
-      - english
-      - french
+    standard_plugins: []
     extensions:
       qa:
         plugins:
