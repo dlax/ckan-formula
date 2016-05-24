@@ -23,11 +23,13 @@ ckan:
         options:
           ckan.harvest.mq.type: redis
       dcat:
-        repourl: https://github.com/ckan/ckanext-dcat
-        rev: '54f6366a5c6368e70cc136b32fe7b2006f30ee27'
+        repourl: https://github.com/logilab/ckanext-dcat
+        branch: datalocale
         plugins:
           - dcat
           - dcat_rdf_harvester
+        options:
+          ckanext.dcat.rdf.profiles: euro_dcat_ap eurovoc_groups_dcat_ap labeled_concepts_dcat_ap
       spatial:
         plugins:
           - spatial_metadata
