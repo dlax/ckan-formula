@@ -8,7 +8,7 @@ import subprocess
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 _formula = "ckan"
-_images = ["centos6"]
+_images = ["centos6", "centos7"]
 
 
 def get_tag(image, salt=False):
@@ -44,9 +44,15 @@ def _build(image, salt=False):
             b"ADD ckan /srv/formula/ckan\n"
             b"ADD solr /srv/formula/solr\n"
             b"ADD _states /srv/formula/_states\n"
-            b"RUN salt-call -l debug state.highstate\n"
-            #b"RUN PATH=/usr/pgsql-9.4/bin/:$PATH salt-call state.highstate\n"
+            b"RUN salt-call -l debug --hard-crash state.highstate\n"
         )
+        if image in ("centos7",):
+            # Salt fail to enable a systemd service if systemd is not running
+            # (during the docker build phase)
+            # This is a workaround.
+            # TODO: implement system-installation of supervisord
+            #dockerfile_content += b"RUN systemctl enable supervisord\n"
+            pass
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
@@ -63,6 +69,7 @@ def test(args, remain):
     """Build a salted docker image and ensure this succeeded."""
     _build(args.image, True)
     tag = get_tag(args.image, True)
+    print(subprocess.check_output(["docker", "images"]))
     assert image_exists(tag)
 
 
