@@ -129,9 +129,12 @@ ckan-deps:
     - makedirs: true
     - recurse:
       - user
+      - group
 
 {{ ckan.confdir}}/who.ini:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
     - user: {{ ckan.ckan_user }}
     - force: true
+    - require:
+      - file: {{ ckan.confdir }}

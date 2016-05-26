@@ -20,4 +20,6 @@ make_config:
     - source: salt://ckan/files/deployment.ini
     - template: jinja
     - backup: minion
+    - require:
+      - file: {{ ckan.confdir }}
 {% endif %}
