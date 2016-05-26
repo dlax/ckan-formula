@@ -20,7 +20,8 @@ ckan:
   datastore_db_name: datastore_default
   datastore_db_user: datastore_default
   datastore_db_password: pass
-  standard_plugins:
+  standard_plugins: []
+  multilingual_lang: []
   extensions:
 
 solr:
