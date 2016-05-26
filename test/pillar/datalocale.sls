@@ -34,3 +34,8 @@ ckan:
         plugins:
           - spatial_metadata
           - spatial_query
+      datalocale:
+        repourl: https://github.com/logilab/ckanext-datalocale
+        branch: logilab
+        plugins:
+          - datalocale
