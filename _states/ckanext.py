@@ -79,6 +79,11 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
 
     # Fetch or clone.
     if os.path.isdir(srcdir):
+        # Ensure git repositories are owned by ckan user before doing anything.
+        res = __salt__['file.chown'](srcdir, user=user, group=group)
+        if res is not None:
+            return failed('sources ownership', res)
+
         # TODO handle change in remote.
         res = __salt__['git.fetch'](cwd=srcdir, user=user,
                                     opts='origin ' + branch)
@@ -97,11 +102,6 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     log('git revision', res)
     if res != rev.strip():
         return failed('git revision', '{0} != {1}'.format(res, rev))
-
-    # TODO drop this.
-    res = __salt__['file.chown'](srcdir, user=user, group=group)
-    if res is not None:
-        return failed('sources ownership', res)
 
     res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
     if res['retcode']:
