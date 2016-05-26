@@ -7,5 +7,6 @@ python:
 env:
   matrix:
     - IMAGE=centos6
+    - IMAGE=centos7
 script:
   - ./run-tests.py test $IMAGE -v
