@@ -36,9 +36,18 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     """Install the `name` CKAN extension.
     """
     ckan = _ckan()
-    # Consider 'rev' from pillar first, then state value and default to branch
-    # name.
-    rev = ckan['extensions'].get(name, {}).get('rev', rev or branch)
+    # Retrieve target revision from pillar rev or branch data, default to rev
+    # or branch parameters if unspecified.
+    extension_data = ckan['extensions'].get(name, {})
+    rev_is_branch = False
+    if 'branch' in extension_data:
+        branch = extension_data['branch']
+    if 'rev' in extension_data:
+        rev = extension_data['rev']
+    else:
+        if rev is None:
+            rev = branch
+            rev_is_branch = True
     if requirements_file is None:
         requirements_file = 'requirements.txt'
     ret = {
@@ -49,9 +58,8 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     }
     fullname = 'ckanext-' + name
     if repourl is None:
-        repourl = ckan['extensions'].get(name, {}).get('repourl', None)
-        if repourl is None:
-            repourl = 'https://github.com/ckan/' + fullname
+        repourl = extension_data.get(
+            'repourl', 'https://github.com/ckan/' + fullname)
     srcdir = os.path.join(ckan['src_dir'], fullname)
     user, group = ckan['ckan_user'], ckan['ckan_group']
     bin_env = ckan['venv_path']
@@ -98,10 +106,20 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     res = __salt__['git.checkout'](cwd=srcdir, rev=rev, user=user)
     if isinstance(res, dict) and res.get('retcode'):
         return failed('sources checkout', res)
-    res = __salt__['git.revision'](cwd=srcdir, user=user).strip()
-    log('git revision', res)
-    if res != rev.strip():
-        return failed('git revision', '{0} != {1}'.format(res, rev))
+    current_rev = __salt__['git.revision'](cwd=srcdir, user=user).strip()
+    log('git revision', current_rev)
+    if not rev_is_branch:
+        # 'rev' specified explicitly.
+        if current_rev != rev.strip():
+            return failed('git revision', '{0} != {1}'.format(current_rev, rev))
+    else:
+        # otherwise, ensure 'branch' is checked out.
+        branch_rev = __salt__['git.revision'](cwd=srcdir, rev=branch, user=user).strip()
+        log('git revision (branch "{0}")'.format(branch), branch_rev)
+        if branch_rev != current_rev:
+            return failed('git revision (branch "{0}")'.format(branch),
+                          '{0} != {1}'.format(branch_rev, current_rev))
+
 
     res = __salt__['pip.install'](editable=srcdir, user=user, bin_env=bin_env)
     if res['retcode']:
