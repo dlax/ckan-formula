@@ -80,23 +80,25 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     # Fetch or clone.
     if os.path.isdir(srcdir):
         # TODO handle change in remote.
-        res = __salt__['git.fetch'](cwd=srcdir, opts='origin ' + branch)
+        res = __salt__['git.fetch'](cwd=srcdir, user=user,
+                                    opts='origin ' + branch)
         if isinstance(res, dict) and res.get('retcode'):
             return failed('sources update', res)
         log('sources fetch', res)
     else:
         ret['changes']['sources clone'] = __salt__['git.clone'](
-            cwd=srcdir, repository=repourl)
+            cwd=srcdir, repository=repourl, user=user)
 
     # Now git checkout step.
-    res = __salt__['git.checkout'](cwd=srcdir, rev=rev)
+    res = __salt__['git.checkout'](cwd=srcdir, rev=rev, user=user)
     if isinstance(res, dict) and res.get('retcode'):
         return failed('sources checkout', res)
-    res = __salt__['git.revision'](cwd=srcdir).strip()
+    res = __salt__['git.revision'](cwd=srcdir, user=user).strip()
     log('git revision', res)
     if res != rev.strip():
         return failed('git revision', '{0} != {1}'.format(res, rev))
 
+    # TODO drop this.
     res = __salt__['file.chown'](srcdir, user=user, group=group)
     if res is not None:
         return failed('sources ownership', res)
