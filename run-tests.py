@@ -44,7 +44,7 @@ def _build(image, salt=False):
             b"ADD ckan /srv/formula/ckan\n"
             b"ADD solr /srv/formula/solr\n"
             b"ADD _states /srv/formula/_states\n"
-            b"RUN salt-call -l debug state.highstate\n"
+            b"RUN salt-call -l debug --hard-crash state.highstate\n"
         )
         if image in ("centos7",):
             # Salt fail to enable a systemd service if systemd is not running
@@ -69,7 +69,7 @@ def test(args, remain):
     """Build a salted docker image and ensure this succeeded."""
     _build(args.image, True)
     tag = get_tag(args.image, True)
-    print(subprocess.check_output(['docker images']))
+    print(subprocess.check_output(["docker", "images"]))
     assert image_exists(tag)
 
 

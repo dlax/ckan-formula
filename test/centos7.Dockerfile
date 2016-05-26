@@ -17,4 +17,5 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == system
     rm -f /lib/systemd/system/anaconda.target.wants/*
 
 ENV LANG en_US.UTF-8
+ENV SHELL /bin/bash
 CMD ["/usr/sbin/init"]
