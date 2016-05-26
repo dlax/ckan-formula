@@ -1,6 +1,7 @@
 {% from "ckan/map.jinja" import ckan with context %}
 
 include:
+  - ckan.install
   - ckan.config
 
 {% set ckan_conffile = [ckan.confdir, ckan.conffile]|join('/') %}
@@ -12,3 +13,5 @@ include:
     - context:
         ckan_conffile: {{ ckan_conffile }}
     - user: {{ ckan.ckan_user }}
+    - require:
+      - file: {{ ckan.confdir }}

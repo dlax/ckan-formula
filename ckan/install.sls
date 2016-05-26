@@ -20,10 +20,17 @@ ckan-user:
 {{ ckan.ckan_home }}:
   file.directory:
     - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
 
 {{ ckan.ckan_home }}/bin:
   file.directory:
     - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
+
+{{ ckan.src_dir }}:
+  file.directory:
+    - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
 
 ckan-venv:
   pkg.installed:
@@ -57,6 +64,8 @@ ckan-src:
     - rev: {{ ckan.ckan_rev }}
     - name: {{ ckan.ckan_repo }}
     - target: {{ ckan_src }}
+    - require:
+      - file: {{ ckan.src_dir }}
   file.directory:
     - name: {{ ckan_src }}
     - user: {{ ckan.ckan_user }}
@@ -116,12 +125,16 @@ ckan-deps:
 {{ ckan.confdir }}:
   file.directory:
     - user: {{ ckan.ckan_user }}
+    - group: {{ ckan.ckan_group }}
     - makedirs: true
     - recurse:
       - user
+      - group
 
 {{ ckan.confdir}}/who.ini:
   file.symlink:
     - target: {{ ckan_src }}/who.ini
     - user: {{ ckan.ckan_user }}
     - force: true
+    - require:
+      - file: {{ ckan.confdir }}
