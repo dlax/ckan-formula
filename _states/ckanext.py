@@ -85,22 +85,28 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
         ret['result'] = False
         return ret
 
+    def clone_repo():
+        ret['changes']['sources clone'] = __salt__['git.clone'](
+            cwd=srcdir, repository=repourl, user=user)
+
     # Fetch or clone.
     if os.path.isdir(srcdir):
         # Ensure git repositories are owned by ckan user before doing anything.
-        res = __salt__['file.chown'](srcdir, user=user, group=group)
-        if res is not None:
-            return failed('sources ownership', res)
-
-        # TODO handle change in remote.
-        res = __salt__['git.fetch'](cwd=srcdir, user=user,
-                                    opts='origin ' + branch)
-        if isinstance(res, dict) and res.get('retcode'):
-            return failed('sources update', res)
-        log('sources fetch', res)
+        owner = __salt__['file.get_user'](srcdir).strip()
+        if owner != user:
+            # And if not, clone it from scratch.
+            res = __salt__['file.remove'](srcdir)
+            ret['changes']['removed existing source directory'] = res
+            clone_repo()
+        else:
+            # TODO handle change in remote.
+            res = __salt__['git.fetch'](cwd=srcdir, user=user,
+                                        opts='origin ' + branch)
+            if isinstance(res, dict) and res.get('retcode'):
+                return failed('sources update', res)
+            log('sources fetch', res)
     else:
-        ret['changes']['sources clone'] = __salt__['git.clone'](
-            cwd=srcdir, repository=repourl, user=user)
+        clone_repo()
 
     # Now git checkout step.
     res = __salt__['git.checkout'](cwd=srcdir, rev=rev, user=user)
