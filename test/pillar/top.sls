@@ -1,3 +1,4 @@
 base:
   '*':
     - datalocale
+    - host-config
