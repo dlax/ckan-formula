@@ -25,6 +25,6 @@ ckan:
   extensions:
 
 solr:
-  apache_mirror: http://mirrors.ircam.fr/pub/apache/
+  apache_mirror: http://archive.apache.org/dist
   release: 4.10.4
   md5: 8ae107a760b3fc1ec7358a303886ca06
