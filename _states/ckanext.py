@@ -85,9 +85,16 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
         ret['result'] = False
         return ret
 
+    def checkout():
+        res = __salt__['git.checkout'](cwd=srcdir, rev=rev, user=user)
+        if isinstance(res, dict) and res.get('retcode'):
+            return failed('sources checkout', res)
+        log('sources checkout', res)
+
     def clone_repo():
         ret['changes']['sources clone'] = __salt__['git.clone'](
             cwd=srcdir, repository=repourl, user=user)
+        checkout()
 
     # Fetch or clone.
     if os.path.isdir(srcdir):
@@ -103,15 +110,18 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
             res = __salt__['git.fetch'](cwd=srcdir, user=user,
                                         opts='origin ' + branch)
             if isinstance(res, dict) and res.get('retcode'):
-                return failed('sources update', res)
+                return failed('sources fetch', res)
             log('sources fetch', res)
+            checkout()
+            if rev_is_branch:
+                res = __salt__['git.pull'](cwd=srcdir, user=user,
+                                           opts='--ff-only')
+                if isinstance(res, dict) and res.get('retcode'):
+                    return failed('sources pull', res)
+                log('sources pull', res)
     else:
         clone_repo()
 
-    # Now git checkout step.
-    res = __salt__['git.checkout'](cwd=srcdir, rev=rev, user=user)
-    if isinstance(res, dict) and res.get('retcode'):
-        return failed('sources checkout', res)
     current_rev = __salt__['git.revision'](cwd=srcdir, user=user).strip()
     log('git revision', current_rev)
     if not rev_is_branch:
