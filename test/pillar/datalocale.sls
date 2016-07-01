@@ -34,6 +34,12 @@ ckan:
         plugins:
           - spatial_metadata
           - spatial_query
+      issues:
+        plugins:
+          - issues
+        options:
+          ckanext.issues.send_email_notifications: true
+          ckanext.issues.max_strikes: 2
       datalocale:
         repourl: https://github.com/logilab/ckanext-datalocale
         branch: logilab
