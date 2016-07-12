@@ -1,5 +1,7 @@
 ckan:
   lookup:
+    ckan_repo: 'https://github.com/logilab/ckan'
+    ckan_rev: 'datalocale-v2.5.2'
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     standard_plugins: []
