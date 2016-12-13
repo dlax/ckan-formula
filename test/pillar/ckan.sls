@@ -22,6 +22,9 @@ ckan:
         options:
           ckanext-archiver.archive_dir: /var/www/ckan-resources
           ckanext-archiver.cache_url_root: http://localhost:9876/resources
+      datapreview:
+        plugins:
+          - datapreview
       harvest:
         plugins:
           - harvest
