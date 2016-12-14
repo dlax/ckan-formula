@@ -5,7 +5,9 @@ ckan:
     ckan_rev: 'datalocale-v2.5.3'
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
-    standard_plugins: []
+    standard_plugins:
+      - datastore
+      - datapusher
     extensions:
       qa:
         plugins:
