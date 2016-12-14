@@ -36,7 +36,7 @@ ckan-venv:
   pkg.installed:
     - pkgs:
       - python-virtualenv
-      - python-pip
+      - {{ ckan.python_pip }}
 
   {% if ckan.scratch_venv -%}
   file.absent:
@@ -63,7 +63,9 @@ ckan-src:
   git.latest:
     - rev: {{ ckan.ckan_rev }}
     - name: {{ ckan.ckan_repo }}
+    - force_reset: true
     - target: {{ ckan_src }}
+    - user: {{ ckan.ckan_user }}
     - require:
       - file: {{ ckan.src_dir }}
   file.directory:
