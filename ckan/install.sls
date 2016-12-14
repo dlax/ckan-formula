@@ -63,6 +63,7 @@ ckan-src:
   git.latest:
     - rev: {{ ckan.ckan_rev }}
     - name: {{ ckan.ckan_repo }}
+    - force_reset: true
     - target: {{ ckan_src }}
     - user: {{ ckan.ckan_user }}
     - require:
