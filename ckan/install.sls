@@ -36,7 +36,7 @@ ckan-venv:
   pkg.installed:
     - pkgs:
       - python-virtualenv
-      - python-pip
+      - {{ ckan.python_pip }}
 
   {% if ckan.scratch_venv -%}
   file.absent:
