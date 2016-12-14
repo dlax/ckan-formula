@@ -64,6 +64,7 @@ ckan-src:
     - rev: {{ ckan.ckan_rev }}
     - name: {{ ckan.ckan_repo }}
     - target: {{ ckan_src }}
+    - user: {{ ckan.ckan_user }}
     - require:
       - file: {{ ckan.src_dir }}
   file.directory:
