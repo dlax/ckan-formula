@@ -31,7 +31,7 @@ def image_exists(image):
         raise RuntimeError("Cannot test if image exists")
 
 
-def _build(image, salt=False):
+def _build(image, salt=False, context='.'):
     dockerfile = "test/{0}.Dockerfile".format(image)
     tag = get_tag(image, salt)
     if salt:
@@ -57,8 +57,9 @@ def _build(image, salt=False):
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
     subprocess.check_call([
-        "docker", "build", "-t", tag, "-f", dockerfile, ".",
+        "docker", "build", "-t", tag, "-f", dockerfile, context,
     ])
+    return tag
 
 
 def build(args, remain):
@@ -79,15 +80,27 @@ def dev(args, remain):
         _build(args.image, args.salt)
     cmd = [
         "docker", "run", "-d", "--hostname", args.image,
-        "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
-        "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
-        "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
-        "-v", "{0}:/srv/formula/.".format(BASEDIR),
     ]
+    postgres_id = None
+    if args.postgres:
+        postgres_image = _build('postgres', salt=False, context='test')
+
+        postgres_id = subprocess.check_output([
+            "docker", "run", "-d", postgres_image,
+        ]).strip()
+        cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
 
     if args.image in ("centos7",):
         # Systemd require privileged container
         cmd.append("--privileged")
+
+    cmd.extend([
+        "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
+        "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
+        "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
+        "-v", "{0}:/srv/formula/.".format(BASEDIR),
+    ])
+
     cmd.append(tag)
 
     # Run the container default CMD as pid 1 (init system)
@@ -97,6 +110,8 @@ def dev(args, remain):
         subprocess.call(["docker", "exec", "-it", docker_id, "/bin/bash"])
     finally:
         subprocess.call(["docker", "rm", "-f", docker_id])
+        if postgres_id:
+            subprocess.call(["docker", "rm", "-f", postgres_id])
 
 
 if __name__ == "__main__":
@@ -111,6 +126,7 @@ if __name__ == "__main__":
     parser_dev = subparsers.add_parser("dev", help="drop a shell in dev container")
     parser_dev.add_argument("image", choices=_images)
     parser_dev.add_argument("--salt", action="store_true")
+    parser_dev.add_argument("--postgres", action="store_true")
     parser_dev.set_defaults(func=dev)
 
     parser_test = subparsers.add_parser("test", help="provision a container and run tests on it")
