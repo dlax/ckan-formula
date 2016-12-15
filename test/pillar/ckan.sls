@@ -1,5 +1,6 @@
 ckan:
   lookup:
+    db_host: postgres
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     standard_plugins:

@@ -46,13 +46,6 @@ def _build(image, salt=False, context='.'):
             b"ADD _states /srv/formula/_states\n"
             b"RUN salt-call -l debug --hard-crash state.highstate\n"
         )
-        if image in ("centos7",):
-            # Salt fail to enable a systemd service if systemd is not running
-            # (during the docker build phase)
-            # This is a workaround.
-            # TODO: implement system-installation of supervisord
-            #dockerfile_content += b"RUN systemctl enable supervisord\n"
-            pass
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
@@ -75,14 +68,18 @@ def test(args, remain):
 
 
 def dev(args, remain):
-    tag = get_tag(args.image, args.salt)
+    return _dev(args.image, args.salt, args.postgres, args.cmd)
+
+
+def _dev(image, salt=False, postgres=False, exec_cmd=None):
+    tag = get_tag(image, salt)
     if not image_exists(tag):
-        _build(args.image, args.salt)
+        _build(image, salt)
     cmd = [
-        "docker", "run", "-d", "--hostname", args.image,
+        "docker", "run", "-d", "--hostname", image,
     ]
     postgres_id = None
-    if args.postgres:
+    if postgres:
         postgres_image = _build('postgres', salt=False, context='test')
 
         postgres_id = subprocess.check_output([
@@ -90,7 +87,7 @@ def dev(args, remain):
         ]).strip()
         cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
 
-    if args.image in ("centos7",):
+    if image in ("centos7",):
         # Systemd require privileged container
         cmd.append("--privileged")
 
@@ -106,8 +103,15 @@ def dev(args, remain):
     # Run the container default CMD as pid 1 (init system)
     docker_id = subprocess.check_output(cmd).strip()
     try:
-        # Spawn a interactive shell in the container
-        subprocess.call(["docker", "exec", "-it", docker_id, "/bin/bash"])
+        if exec_cmd is not None:
+            proc = subprocess.Popen(
+                ["docker", "exec", "-t", docker_id] + exec_cmd.split(),
+                stdout=sys.stdout, stderr=sys.stderr,
+            )
+            return proc.wait()
+        else:
+            # Spawn a interactive shell in the container
+            subprocess.call(["docker", "exec", "-it", docker_id, "/bin/bash"])
     finally:
         subprocess.call(["docker", "rm", "-f", docker_id])
         if postgres_id:
@@ -126,7 +130,10 @@ if __name__ == "__main__":
     parser_dev = subparsers.add_parser("dev", help="drop a shell in dev container")
     parser_dev.add_argument("image", choices=_images)
     parser_dev.add_argument("--salt", action="store_true")
-    parser_dev.add_argument("--postgres", action="store_true")
+    parser_dev.add_argument("--postgres", action="store_true",
+                            help='link with a "postgres" container')
+    parser_dev.add_argument("--cmd",
+                            help='command to execute in the running container')
     parser_dev.set_defaults(func=dev)
 
     parser_test = subparsers.add_parser("test", help="provision a container and run tests on it")

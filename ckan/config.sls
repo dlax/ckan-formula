@@ -15,8 +15,9 @@ make_config:
       - virtualenv: ckan-venv
       - file: {{ ckan.confdir }}
 {% else %}
-{{ ckan_conffile }}:
+ckan-ini-file:
   file.managed:
+    - name: {{ ckan_conffile }}
     - source: salt://ckan/files/deployment.ini
     - template: jinja
     - backup: minion
