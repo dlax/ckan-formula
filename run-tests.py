@@ -126,7 +126,8 @@ if __name__ == "__main__":
     parser_dev = subparsers.add_parser("dev", help="drop a shell in dev container")
     parser_dev.add_argument("image", choices=_images)
     parser_dev.add_argument("--salt", action="store_true")
-    parser_dev.add_argument("--postgres", action="store_true")
+    parser_dev.add_argument("--postgres", action="store_true",
+                            help='link with a "postgres" container')
     parser_dev.set_defaults(func=dev)
 
     parser_test = subparsers.add_parser("test", help="provision a container and run tests on it")
