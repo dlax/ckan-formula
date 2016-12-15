@@ -19,3 +19,9 @@ init_databases:
       - virtualenv: ckan-venv
       - file: ckan-ini-file
       - pkg: postgresql-client
+
+{% for extname in ckan.extensions %}
+{{ extname }}-init-db:
+  ckanext.init_db:
+    - name: {{ extname }}
+{% endfor %}

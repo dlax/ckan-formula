@@ -1,6 +1,7 @@
 """States for managing CKAN extensions."""
 
 import os
+from os import path
 
 import yaml
 
@@ -29,6 +30,7 @@ def _ckan():
         merge=True
     )
     ckan['venv_path'] = ckan['ckan_home'] + '/venv'
+    ckan['confdir'] = path.join(ckan['ckan_home'], 'etc', 'ckan', 'default')
     return ckan
 
 
@@ -64,9 +66,8 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
     user, group = ckan['ckan_user'], ckan['ckan_group']
     bin_env = ckan['venv_path']
     if __opts__['test']:
-        ret['comment'] = (
-            'would install {0} CKAN extention into {1} virtualenv'.format(
-            name, bin_env))
+        ret['comment'] = 'would install {0} CKAN extention into {1} virtualenv'.format(
+            name, bin_env)
         ret['result'] = None
         return ret
 
@@ -153,4 +154,53 @@ def installed(name, repourl=None, branch='master', rev=None, requirements_file=N
                 fullname, requirements_file))
     ret['comment'] = ' successfully installed CKAN extension {0}'.format(name)
     ret['result'] = True
+    return ret
+
+
+def init_db(name):
+    """Initialize database of `name` extension."""
+    ckan = _ckan()
+    subcommand, initarg = {
+        'report': ('report', 'initdb'),
+        'spatial': ('spatial', 'initdb'),
+        'harvest': ('harvester', 'initdb'),
+        'issues': ('issues', 'init_db'),
+    }.get(name, (name, 'init'))
+    paster_exe = path.join(ckan['venv_path'], 'bin', 'paster')
+    ckan_conffile = path.join(ckan['confdir'], ckan['conffile'])
+    cmd = ' '.join([paster_exe, '--plugin=ckanext-{0}'.format(name),
+                    subcommand, initarg, '--config', ckan_conffile])
+    ret = {
+        'changes': {},
+        'comment': '',
+        'name': name,
+        'result': None,
+    }
+
+    if __opts__['test']:
+        ret['comment'] = 'Command "{0}" would have been executed'.format(cmd),
+        ret['result'] = None
+        return ret
+
+    test_cmd = ' '.join([paster_exe, '--plugin=ckanext-{0}'.format(name),
+                         subcommand, initarg, '-h'])
+    test_retcode = __salt__['cmd.retcode'](test_cmd, runas=ckan['ckan_user'])
+    if test_retcode != 0:
+        ret['result'] = None
+        ret['comment'] = ('extension {0} does not appear to support {1} '
+                          'command'.format(name, initarg))
+        ret['retcode'] = test_retcode
+        return ret
+    else:
+        ret['changes']['check-command'] = '{0} command exists for extention {1}'.format(
+            initarg, name)
+
+    cmd_result = __salt__['cmd.run_all'](cmd, runas=ckan['ckan_user'])
+    success = cmd_result['retcode'] == 0
+    ret['result'] =  success
+    if success:
+        ret['comment'] = 'successfully initialized db for extention {0}'.format(name)
+    else:
+        ret['comment'] = 'failed to initialize db for extention {0}'.format(name)
+    ret['changes'].update(cmd_result)
     return ret
