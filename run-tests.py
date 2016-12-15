@@ -46,13 +46,6 @@ def _build(image, salt=False, context='.'):
             b"ADD _states /srv/formula/_states\n"
             b"RUN salt-call -l debug --hard-crash state.highstate\n"
         )
-        if image in ("centos7",):
-            # Salt fail to enable a systemd service if systemd is not running
-            # (during the docker build phase)
-            # This is a workaround.
-            # TODO: implement system-installation of supervisord
-            #dockerfile_content += b"RUN systemctl enable supervisord\n"
-            pass
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
