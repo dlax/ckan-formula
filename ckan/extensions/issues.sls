@@ -6,6 +6,6 @@ include:
 
 issues:
   ckanext.installed:
-    - rev: '61db215d9a51a635162654a12055cd9bcd51e7de'
+    - rev: '1a91e25bff2d10b320d55332a721106190069aae'
     - require:
       - virtualenv: {{ ckan.venv_path }}
