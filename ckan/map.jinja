@@ -41,7 +41,7 @@ that differ from whats in defaults.yaml
 {## Merge the flavor_map to the default settings ##}
 {% do default_settings.ckan.update(os_family_map) %}
 
-{## Merge in template:lookup pillar ##}
+{## Merge in ckan:lookup pillar ##}
 {% set ckan = salt['pillar.get'](
         'ckan',
         default=default_settings.ckan,

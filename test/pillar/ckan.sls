@@ -7,6 +7,8 @@ ckan:
       - multilingual_dataset
       - multilingual_group
       - multilingual_tag
+      - datastore
+      - datapusher
     multilingual_lang:
       - english
       - french
