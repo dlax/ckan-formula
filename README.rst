@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/logilab/ckan-formula.svg?branch=master
-    :target: https://travis-ci.org/logilab/ckan-formula
+.. image:: https://travis-ci.org/saltstack-formulas/ckan-formula.svg?branch=master
+    :target: https://travis-ci.org/saltstack-formulas/ckan-formula
     
 ============
 ckan-formula
