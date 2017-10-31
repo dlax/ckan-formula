@@ -5,6 +5,7 @@ include:
   - ckan.supervisor
   - ckan.config
   - ckan.redis_install
+  - ckan.extensions.archiver
 
 
 packages_deps:
@@ -15,10 +16,10 @@ packages_deps:
 
 archiver:
   ckanext.installed:
-    - rev: '0a1c2a3c2a2f1699f60f14945aa82d420baf7896'
     - require:
       - virtualenv: {{ ckan.venv_path }}
       - pkg: packages_deps
+      - ckanext: report
 
 
 {{ supervisor_confdir }}/ckanext-archiver.conf:
