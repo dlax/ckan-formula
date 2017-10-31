@@ -32,23 +32,11 @@ def image_exists(image):
 
 
 def _build(image, salt=False, context='.'):
-    dockerfile = "test/{0}.Dockerfile".format(image)
     tag = get_tag(image, salt)
+    basename = image
     if salt:
-        dockerfile_content = open(dockerfile, "rb").read()
-        dockerfile_content += (
-            b"\n"
-            b"ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"
-            b"ADD test/salt /srv/salt\n"
-            b"ADD test/pillar /srv/pillar\n"
-            b"ADD ckan /srv/formula/ckan\n"
-            b"ADD solr /srv/formula/solr\n"
-            b"ADD _states /srv/formula/_states\n"
-            b"RUN salt-call -l debug --hard-crash state.highstate\n"
-        )
-        dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
-        with open(dockerfile, "wb") as fd:
-            fd.write(dockerfile_content)
+        basename += '_salted'
+    dockerfile= os.path.join("test", '{}.Dockerfile'.format(basename))
     subprocess.check_call([
         "docker", "build", "-t", tag, "-f", dockerfile, context,
     ])
