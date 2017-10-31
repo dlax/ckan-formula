@@ -17,7 +17,7 @@ solr:
     - source: {{ [solr.apache_mirror, 'lucene', 'solr', solr.release, solr.dist]|join('/') }}.tgz
     - source_hash: md5={{ solr.md5 }}
     - archive_format: tar
-    - tar_options: x
+    - options: x
     - if_missing: {{ solr.dist_dir }}
 
 {{ solr.home }}:
