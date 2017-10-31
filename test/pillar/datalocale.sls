@@ -1,7 +1,7 @@
 ckan:
   lookup:
     db_host: postgres
-    ckan_repo: 'https://github.com/logilab/ckan'
+    ckan_repo: 'https://github.com/datalocale/ckan'
     ckan_rev: 'datalocale-v2.6.1'
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
@@ -28,7 +28,7 @@ ckan:
         options:
           ckan.harvest.mq.type: redis
       dcat:
-        repourl: https://github.com/logilab/ckanext-dcat
+        repourl: https://github.com/datalocale/ckanext-dcat
         branch: datalocale
         plugins:
           - dcat
@@ -46,7 +46,6 @@ ckan:
           ckanext.issues.send_email_notifications: true
           ckanext.issues.max_strikes: 2
       datalocale:
-        repourl: https://github.com/logilab/ckanext-datalocale
-        branch: logilab
+        repourl: https://github.com/datalocale/ckanext-datalocale
         plugins:
           - datalocale
