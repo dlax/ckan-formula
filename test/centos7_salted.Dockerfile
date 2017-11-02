@@ -1,4 +1,4 @@
-FROM dlaxalde/centos7-salt-minion
+FROM logilab/centos7-salt-minion
 
 ADD test/minion.conf /etc/salt/minion.d/minion.conf
 ADD test/salt /srv/salt
