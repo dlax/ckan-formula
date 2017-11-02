@@ -57,19 +57,10 @@ supervisor_confdir:
 
 {% endif %}
 
-{{ supervisor_confdir }}/celery.conf:
+{% for name in ('celery', 'ckan', 'redis') %}
+{{ supervisor_confdir }}/{{ name }}.conf:
   file.managed:
-    - source: salt://ckan/files/celery-supervisor.conf
-    - template: jinja
-    {% if grains['os_family'] != 'Debian' %}
-    - user: {{ ckan.ckan_user }}
-    {% endif %}
-    - require:
-      - file: supervisor_confdir
-
-{{ supervisor_confdir }}/ckan.conf:
-  file.managed:
-    - source: salt://ckan/files/ckan-supervisor.conf
+    - source: salt://ckan/files/{{ name }}-supervisor.conf
     - template: jinja
     {% if grains['os_family'] != 'Debian' %}
     - user: {{ ckan.ckan_user }}
@@ -77,3 +68,4 @@ supervisor_confdir:
     - require:
       - file: supervisor_confdir
       - pip: gunicorn
+{% endfor %}
