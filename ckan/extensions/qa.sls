@@ -10,3 +10,4 @@ qa:
     - requirements_file: 'requirements.txt'
     - require:
       - virtualenv: {{ ckan.venv_path }}
+      - ckanext: archiver
