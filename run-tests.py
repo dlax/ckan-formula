@@ -8,7 +8,7 @@ import subprocess
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 _formula = "ckan"
-_images = ["centos6", "centos7"]
+_images = ["centos7"]
 
 
 def get_tag(image, salt=False):
