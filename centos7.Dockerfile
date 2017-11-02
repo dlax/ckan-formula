@@ -1,1 +1,1 @@
-test/centos7_salted.Dockerfile
+test/centos7.Dockerfile

@@ -33,13 +33,13 @@ def image_exists(image):
 
 def _build(image, salt=False, context='.'):
     tag = get_tag(image, salt)
-    basename = image
-    if salt:
-        basename += '_salted'
-    dockerfile= os.path.join("test", '{}.Dockerfile'.format(basename))
-    subprocess.check_call([
+    dockerfile = os.path.join(BASEDIR, 'test', '{}.Dockerfile'.format(image))
+    args = [
         "docker", "build", "-t", tag, "-f", dockerfile, context,
-    ])
+    ]
+    if not salt:
+        args.extend(['--build-arg', 'SALT_ARGS=--version'])
+    subprocess.check_call(args)
     return tag
 
 
