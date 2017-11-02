@@ -35,8 +35,12 @@ ckan-user:
 ckan-venv:
   pkg.installed:
     - pkgs:
-      - python-virtualenv
       - {{ ckan.python_pip }}
+
+  cmd.run:
+    - name: pip install --user virtualenv
+    - user: {{ ckan.ckan_user }}
+    - creates: {{ home }}/.local/bin/virtualenv
 
   {% if ckan.scratch_venv -%}
   file.absent:
@@ -45,17 +49,10 @@ ckan-venv:
 
   virtualenv.managed:
     - name: {{ ckan.venv_path }}
+    - venv_bin: {{ home }}/.local/bin/virtualenv
     - user: {{ ckan.ckan_user }}
     - require:
       - user: ckan-user
-
-  pip.installed:
-    - name: pip
-    - upgrade: true
-    - bin_env: {{ ckan.venv_path }}
-    - user: {{ ckan.ckan_user }}
-    - require:
-      - virtualenv: ckan-venv
 
 {% set ckan_src = ckan.src_dir + '/ckan' %}
 
