@@ -18,4 +18,6 @@ ADD _states /srv/formula/_states
 ARG SALT_ARGS=state.highstate
 RUN salt-call -l debug --hard-crash $SALT_ARGS
 
-CMD ["/usr/sbin/init"]
+ARG USER=ckan
+USER $USER
+CMD ["/home/ckan/bin/supervisord", "--nodaemon"]

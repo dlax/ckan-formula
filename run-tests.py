@@ -38,7 +38,8 @@ def _build(image, salt=False, context='.'):
         "docker", "build", "-t", tag, "-f", dockerfile, context,
     ]
     if not salt:
-        args.extend(['--build-arg', 'SALT_ARGS=--version'])
+        args.extend(['--build-arg', 'SALT_ARGS=--version',
+                     '--build-arg', 'USER=root'])
     subprocess.check_call(args)
     return tag
 
@@ -75,10 +76,6 @@ def _dev(image, salt=False, postgres=False, exec_cmd=None):
         ]).strip()
         cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
 
-    if image in ("centos7",):
-        # Systemd require privileged container
-        cmd.append("--privileged")
-
     cmd.extend([
         "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
         "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
@@ -88,12 +85,15 @@ def _dev(image, salt=False, postgres=False, exec_cmd=None):
 
     cmd.append(tag)
 
-    # Run the container default CMD as pid 1 (init system)
+    if not salt:
+        # run a endless daemon instead of supervisor
+        cmd.extend(["tail", "-F", "/dev/null"])
+
     docker_id = subprocess.check_output(cmd).strip()
     try:
         if exec_cmd is not None:
             proc = subprocess.Popen(
-                ["docker", "exec", "-t", docker_id] + exec_cmd.split(),
+                ["docker", "exec", "--user", "root", "-t", docker_id] + exec_cmd.split(),
                 stdout=sys.stdout, stderr=sys.stderr,
             )
             return proc.wait()
