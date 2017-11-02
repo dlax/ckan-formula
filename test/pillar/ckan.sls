@@ -9,9 +9,6 @@ ckan:
       - multilingual_tag
       - datastore
       - datapusher
-    multilingual_lang:
-      - english
-      - french
     extensions:
       qa:
         plugins:
