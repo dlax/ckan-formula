@@ -32,31 +32,19 @@ solr-schema:
       {% endif %}
 
 {% if 'multilingual_dataset' in salt['pillar.get']('ckan:lookup:standard_plugins')  %}
-{% for lang in ckan.get('multilingual_lang') -%}
-{% set stop_filename = lang + '_stop.txt' -%}
-{% set stop_filepath = [ckan.src_dir,
-                        'ckan/ckanext/multilingual/solr',
-                        stop_filename]|join('/') -%}
-{{ stop_filename }}:
-  file.copy:
-    - source: {{ ckan.src_dir }}/ckan/ckanext/multilingual/solr/{{ stop_filename }}
+multilingual dataset:
+  cmd.run:
     {% if grains['os_family'] == 'Debian' %}
-    - name: /usr/share/solr/conf/{{ stop_filename }}
-    - watch_in:
-      - service: solr
-    {% elif grains['os_family'] == 'RedHat' %}
-    - name: {{ solr.home }}/solr/collection1/conf/{{ stop_filename }}
-    {% endif %}
-    - force: True
-    - makedirs: True
+    - name: cp {{ ckan.src_dir }}/ckan/ckanext/multilingual/solr/*.txt /usr/share/solr/conf/
     - require:
       - git: ckan-src
-      {% if grains['os_family'] == 'Debian' %}
       - pkg: solr
-      {% elif grains['os_family'] == 'RedHat' %}
+    {% elif grains['os_family'] == 'RedHat' %}
+    - name: cp {{ ckan.src_dir }}/ckan/ckanext/multilingual/solr/*.txt {{ solr.home }}/solr/collection1/conf/
+    - require:
+      - git: ckan-src
       - archive: solr
-      {% endif %}
-{% endfor %}
+    {% endif %}
 {% endif %}
 
 {% if grains['os_family'] == 'RedHat' %}

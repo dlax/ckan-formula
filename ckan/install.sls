@@ -35,8 +35,14 @@ ckan-user:
 ckan-venv:
   pkg.installed:
     - pkgs:
-      - python-virtualenv
       - {{ ckan.python_pip }}
+
+  pip.installed:
+    - name: virtualenv
+    - user: {{ ckan.ckan_user }}
+    - upgrade: true
+    - install_options:
+      - --user
 
   {% if ckan.scratch_venv -%}
   file.absent:
@@ -45,17 +51,10 @@ ckan-venv:
 
   virtualenv.managed:
     - name: {{ ckan.venv_path }}
+    - venv_bin: {{ home }}/.local/bin/virtualenv
     - user: {{ ckan.ckan_user }}
     - require:
       - user: ckan-user
-
-  pip.installed:
-    - name: pip
-    - upgrade: true
-    - bin_env: {{ ckan.venv_path }}
-    - user: {{ ckan.ckan_user }}
-    - require:
-      - virtualenv: ckan-venv
 
 {% set ckan_src = ckan.src_dir + '/ckan' %}
 
@@ -123,6 +122,13 @@ ckan-deps:
       {% if grains['os_family'] == 'RedHat' -%}
       - file: ckan_user_bash_profile
       {% endif %}
+
+gunicorn:
+  pip.installed:
+    - user: {{ ckan.ckan_user }}
+    - bin_env: {{ ckan.venv_path }}
+    - require:
+      - virtualenv: ckan-venv
 
 {{ ckan.confdir }}:
   file.directory:

@@ -7,6 +7,27 @@ ckan-formula
 
 A saltstack formula handling installation of CKAN_.
 
+
+Docker image
+============
+
+You can run ckan from the docker image directly::
+
+    docker pull logilab/ckan-formula
+    docker run -d --name ckan \
+        --env CKAN_DATASTORE_WRITE_URL=postgresql://user:pass@pghost/datastore_default
+        --env CKAN_DATASTORE_READ_URL=postgresql://user_ro:pass@pghost/datastore_default
+        --env SQLALCHEMY_URL=postgresql://user:pass@pghost/ckan_default
+        logilab/ckan-formula
+
+
+Database could be initialized with::
+
+    docker exec -it --user root ckan \
+        salt-call state.sls ckan.dbsetup
+    docker exec -it ckan /home/ckan/bin/supervisorctl start all
+
+
 Available states
 ================
 
