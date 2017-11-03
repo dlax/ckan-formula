@@ -124,6 +124,13 @@ ckan-deps:
       - file: ckan_user_bash_profile
       {% endif %}
 
+gunicorn:
+  pip.installed:
+    - user: {{ ckan.ckan_user }}
+    - bin_env: {{ ckan.venv_path }}
+    - require:
+      - virtualenv: ckan-venv
+
 {{ ckan.confdir }}:
   file.directory:
     - user: {{ ckan.ckan_user }}

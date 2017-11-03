@@ -46,13 +46,6 @@ datapusher deps:
     - require:
       - pip: datapusher
 
-gunicorn:
-  pip.installed:
-    - user: {{ ckan.ckan_user }}
-    - bin_env: {{ ckan.venv_path }}
-    - require:
-      - virtualenv: ckan-venv
-
 {{ supervisor_confdir }}/datapusher.conf:
   file.managed:
     - source: salt://ckan/files/datapusher-supervisor.conf
@@ -62,5 +55,6 @@ gunicorn:
     {% endif %}
     - require:
       - file: supervisor_confdir
+      - pip: gunicorn
 
 {% endif %}

@@ -76,3 +76,4 @@ supervisor_confdir:
     {% endif %}
     - require:
       - file: supervisor_confdir
+      - pip: gunicorn
