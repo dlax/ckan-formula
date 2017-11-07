@@ -1,8 +1,8 @@
 ckan:
   lookup:
     db_host: postgres
-    ckan_repo: 'https://github.com/datalocale/ckan'
-    ckan_rev: 'datalocale-v2.6.4'
+    ckan_repo: 'https://github.com/dlax/ckan'
+    ckan_rev: 'dbinit-harvest-tables'
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     standard_plugins:
