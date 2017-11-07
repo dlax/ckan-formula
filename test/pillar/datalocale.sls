@@ -2,7 +2,7 @@ ckan:
   lookup:
     db_host: postgres
     ckan_repo: 'https://github.com/datalocale/ckan'
-    ckan_rev: 'datalocale-v2.6.1'
+    ckan_rev: 'datalocale-v2.6.4'
     ckan_home: /home/ckan
     src_dir: /home/ckan/src
     standard_plugins:
